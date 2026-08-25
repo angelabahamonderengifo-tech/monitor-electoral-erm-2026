@@ -1,0 +1,35 @@
+.highlighted-pdf-scroll {
+  scroll-behavior: smooth;
+  text-align: left;
+}
+
+.highlighted-pdf-page {
+  display: block;
+  width: max-content;
+  min-width: 760px;
+  min-height: 880px;
+  margin: 0 auto 16px;
+  scroll-margin-top: 54px;
+}
+
+.highlighted-pdf-page canvas {
+  display: block;
+}
+
+.pdf-page-number {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  padding: 4px 7px;
+  border-radius: 10px;
+  background: #25282bd9;
+  color: #fff;
+  font-size: 8px;
+  line-height: 1;
+}
+
+@media (max-width: 820px) {
+  .highlighted-pdf-page {
+    min-width: 620px;
+  }
+}

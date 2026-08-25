@@ -1,0 +1,60 @@
+.national-lists > button.active {
+  background: #dceaff;
+  box-shadow:
+    inset 4px 0 #2c6fc5,
+    inset 0 0 0 1px #bdd3f2;
+}
+
+.national-lists > button.active strong {
+  color: #173f75;
+}
+
+.national-clear {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid #cbd8e8;
+  border-radius: 7px;
+  background: #fff;
+  color: #315273;
+  padding: 9px 10px;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.national-clear:hover:not(:disabled) {
+  border-color: #8eb1dc;
+  background: #f3f7fc;
+  color: #195fae;
+}
+
+.national-clear:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.trajectory-grid li .trajectory-jurisdiction {
+  margin-top: 5px;
+  color: #355c86;
+}
+
+.trajectory-grid li .trajectory-jurisdiction b {
+  color: #24486f;
+}
+
+.trajectory-grid li .trajectory-source {
+  display: inline-block;
+  margin-top: 5px;
+  color: #1764ce;
+  font-size: 7px;
+  text-decoration: none;
+}
+
+.trajectory-grid li .trajectory-source:hover {
+  text-decoration: underline;
+}
+
+.trajectory-grid .official-history-note {
+  background: #eef6ff;
+  color: #315b86;
+}

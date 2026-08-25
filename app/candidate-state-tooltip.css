@@ -1,0 +1,20 @@
+.candidate-state-field{position:relative;overflow:visible!important}
+.candidate-state-trigger{display:block;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:help}
+.candidate-state-trigger small,.candidate-state-trigger strong{display:block}
+.candidate-state-trigger small span{color:#1764bf;font-size:9px}
+.candidate-state-tooltip{position:absolute;z-index:120;right:0;top:calc(100% + 7px);width:min(290px,70vw);padding:12px;border:1px solid #d4e0ed;border-radius:9px;background:#fff;color:#31445a;box-shadow:0 12px 30px #15304f29;text-align:left}
+.candidate-state-tooltip:before{content:"";position:absolute;right:18px;top:-6px;width:10px;height:10px;border-left:1px solid #d4e0ed;border-top:1px solid #d4e0ed;background:#fff;transform:rotate(45deg)}
+.candidate-state-tooltip:after{content:"";position:absolute;left:0;right:0;top:-11px;height:12px;background:transparent}
+.candidate-state-tooltip>b{display:block;color:#183a61;font-size:10px}
+.candidate-state-tooltip>p,.candidate-state-motive p{margin:5px 0 0;font-size:8px;line-height:1.48;font-weight:400}
+.candidate-state-tooltip>span{display:block;margin-top:8px;color:#748196;font-size:7.5px;line-height:1.45}
+.candidate-state-loading{padding-left:12px;position:relative}
+.candidate-state-loading:before{content:"";position:absolute;left:0;top:1px;width:7px;height:7px;border:1px solid #8da9c8;border-top-color:#1764bf;border-radius:50%;animation:candidate-state-spin .8s linear infinite}
+.candidate-state-motive{margin-top:9px;padding-top:8px;border-top:1px solid #e6ecf2}
+.candidate-state-motive small{color:#1764bf;font-size:6.5px;letter-spacing:.08em}
+.candidate-state-tooltip footer{display:grid;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid #e6ecf2}
+.candidate-state-tooltip footer span{color:#718196;font-size:7px;line-height:1.35}
+.candidate-state-tooltip footer button{justify-self:start;padding:0;border:0;background:transparent;color:#1764bf;font-size:7.5px;font-weight:700;cursor:pointer}
+@keyframes candidate-state-spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.candidate-state-tooltip{right:0;top:calc(100% + 7px)}}
+@media(max-width:520px){.candidate-state-tooltip{position:fixed;left:14px;right:14px;top:auto;bottom:18px;width:auto}.candidate-state-tooltip:before{display:none}}
