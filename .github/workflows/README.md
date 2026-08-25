@@ -1,23 +1,13 @@
-# Despliegue automático
+# Despliegue automático de STAGING
 
-El flujo `deploy-production.yml` se ejecuta después de cada `push` a la rama
-`main` y ejecuta `update-angela-staging` en el servidor de producción.
+El flujo `deploy-staging.yml` se ejecuta después de cada `push` a `main` y de
+forma manual mediante `workflow_dispatch`. Se ejecuta directamente en el runner
+self-hosted `angela-staging`, instalado en el servidor de STAGING.
 
-Antes del primer despliegue, crea estos secretos en GitHub, en
-**Settings → Secrets and variables → Actions**:
+El runner debe poder ejecutar sin interacción el comando:
 
-| Secreto | Valor |
-| --- | --- |
-| `DEPLOY_HOST` | IP o nombre de dominio del servidor. |
-| `DEPLOY_USER` | Usuario SSH autorizado para ejecutar `update-angela-staging`. |
-| `DEPLOY_SSH_KEY` | Clave privada SSH de una clave de despliegue dedicada. |
-| `DEPLOY_KNOWN_HOSTS` | Línea de la clave pública del servidor en formato `known_hosts` (por ejemplo, la salida de `ssh-keyscan -H TU_SERVIDOR`). |
-| `DEPLOY_PORT` | Puerto SSH; si se omite, se usa `22`. |
+```bash
+sudo /usr/local/sbin/update-angela-staging
+```
 
-La clave pública correspondiente debe estar en `~/.ssh/authorized_keys` del
-usuario del servidor. Para limitar su alcance, conviene permitirle solamente el
-comando de despliegue.
-
-Una vez configurados los secretos, usa **Actions → Deploy production → Run
-workflow** para ejecutar la primera prueba. Después, cada cambio enviado a
-`main` actualizará el servidor automáticamente.
+No se emplean conexiones SSH desde GitHub Actions ni secretos `DEPLOY_*`.

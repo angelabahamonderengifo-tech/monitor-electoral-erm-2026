@@ -1,0 +1,20 @@
+name: Deploy STAGING
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: angela-staging-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Update STAGING
+    runs-on: [self-hosted, linux, x64, angela-staging]
+    timeout-minutes: 15
+    steps:
+      - name: Deploy STAGING
+        run: sudo /usr/local/sbin/update-angela-staging
