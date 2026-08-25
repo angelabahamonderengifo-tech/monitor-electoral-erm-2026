@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BASE="https://plataformahistorico.jne.gob.pe";
 const safe=(v:string|null)=>/^[0-9]{1,6}$/.test(v||"")?(v as string):"";
-const HISTORICAL_ERM_PROCESSES=[
- {id:84,year:2018,name:"ELECCIONES REGIONALES Y MUNICIPALES 2018"},
+const HISTORICAL_PROCESSES=[
  {id:113,year:2022,name:"ELECCIONES REGIONALES Y MUNICIPALES 2022"},
+ {id:110,year:2021,name:"ELECCIONES GENERALES 2021"},
+ {id:109,year:2020,name:"ELECCIONES CONGRESALES EXTRAORDINARIAS 2020"},
+ {id:84,year:2018,name:"ELECCIONES REGIONALES Y MUNICIPALES 2018"},
+ {id:79,year:2016,name:"ELECCIONES GENERALES 2016"},
+ {id:74,year:2014,name:"ELECCIONES REGIONALES Y MUNICIPALES 2014"},
+ {id:60,year:2011,name:"ELECCIONES GENERALES 2011"},
 ];
 const normalizedName=(value:string)=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim().toUpperCase();
 const normalizedDate=(value:string)=>{
@@ -32,11 +37,12 @@ const dedupeTrajectory=(items:any[],keys:string[])=>{
 };
 const sameOfficialIdentity=(personal:any,reference:any)=>{
  const personalDocument=String(personal?.strDocumentoIdentidad||"").trim();
- const referenceDocument=String(reference?.strdocumentoidentidad||"").trim();
+ const referenceDocument=String(reference?.strdocumentoidentidad||reference?.strDocumentoIdentidad||"").trim();
+ if(personalDocument&&referenceDocument&&personalDocument===referenceDocument)return true;
  const personalName=normalizedName([personal?.strNombres,personal?.strApellidoPaterno,personal?.strApellidoMaterno].filter(Boolean).join(" "));
  const referenceName=normalizedName([reference?.strnombrecompleto,reference?.strapellidopaterno,reference?.strapellidomaterno].filter(Boolean).join(" "));
  const sameBirth=!personal?.strFechaNacimiento||!reference?.strfechanacimiento||normalizedDate(personal.strFechaNacimiento)===normalizedDate(reference.strfechanacimiento);
- return Boolean(personalDocument&&referenceDocument&&personalDocument===referenceDocument&&personalName===referenceName&&sameBirth);
+ return Boolean(personalName&&referenceName&&(personalName===referenceName||personalName.includes(referenceName)||referenceName.includes(personalName))&&sameBirth);
 };
 const historicalCvSource=`${BASE}/OrganizacionesPoliticas/BusquedaAvanzada`;
 const firstOfficialValue=(record:any,keys:string[])=>{
@@ -159,26 +165,44 @@ export async function GET(req:NextRequest){
   try{
    const r=await fetch(`${BASE}/HojaVida/GetHVConsolidado?param=${hv}-0-${org}-126`,{headers:{Accept:"application/json",Referer:`${BASE}/ListaDeCandidatos/DetalleHDV`},next:{revalidate:900}});
    if(!r.ok)throw new Error("JNE "+r.status);
-   const body=await r.json(),h=body.data??{};
+   const body=await r.json();
+   const h=body.data??{};
    const personal=h.oDatosPersonales??{};
+   const documentNumber=String(personal.strDocumentoIdentidad||"").trim();
    const fullName=[personal.strNombres,personal.strApellidoPaterno,personal.strApellidoMaterno].filter(Boolean).join(" ");
    const searchName=[personal.strNombres,personal.strApellidoPaterno,personal.strApellidoMaterno].filter(Boolean).join(",");
-   const historicalResponses=searchName?await Promise.all(HISTORICAL_ERM_PROCESSES.map(async process=>{
+   const historicalResponses=(searchName||documentNumber)?await Promise.all(HISTORICAL_PROCESSES.map(async process=>{
     try{
-     const response=await fetch(`${BASE}/PresentacionEstadistica/GetAvanzadaCanditados`,{
+     const payload: Record<string, any> = {
+       idProcesoElectoral: process.id,
+       idEstadosCanPer: 0,
+       strDatosPersonales: documentNumber ? "" : searchName,
+       idTipoEleccion: 0,
+       strDocumentoIdentidad: documentNumber || "",
+       strUbigeo: null,
+       idOrganizacionPolitica: 0,
+       idEducacion: 0,
+       cargoEleccions: [],
+       bTieneSentenciasPenales: "0",
+       bTieneSentenciasCiviles: "0",
+     };
+     let response=await fetch(`${BASE}/PresentacionEstadistica/GetAvanzadaCanditados`,{
       method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
-      body:JSON.stringify({idProcesoElectoral:process.id,idEstadosCanPer:0,strDatosPersonales:searchName,idTipoEleccion:0,strDocumentoIdentidad:"",strUbigeo:null,idOrganizacionPolitica:0,idEducacion:0,cargoEleccions:[],bTieneSentenciasPenales:"0",bTieneSentenciasCiviles:"0"}),
+      body:JSON.stringify(payload),
       next:{revalidate:86400}
      });
-     if(!response.ok)return {ok:false,rows:[]};
-     const rows=((await response.json()).data??[]).filter((item:any)=>{
-      const candidateName=[item.strnombrecompleto,item.strapellidopaterno,item.strapellidomaterno].filter(Boolean).join(" ");
-      const sameName=normalizedName(candidateName)===normalizedName(fullName);
-      const sameBirth=!personal.strFechaNacimiento||!item.strfechanacimiento||normalizedDate(item.strfechanacimiento)===normalizedDate(personal.strFechaNacimiento);
-      const sameDocument=!personal.strDocumentoIdentidad||!item.strdocumentoidentidad||String(item.strdocumentoidentidad)===String(personal.strDocumentoIdentidad);
-      return sameName&&sameBirth&&sameDocument;
-     });
-     return {ok:true,rows:rows.map((item:any)=>({...item,idProcesoHistorico:process.id,intAnioProceso:process.year,strProcesoHistorico:process.name,strFuenteHistorica:historicalCvSource}))};
+     let rows=((await response.json()).data??[]);
+     if(!rows.length && searchName && documentNumber){
+       const fallbackPayload = { ...payload, strDatosPersonales: searchName, strDocumentoIdentidad: "" };
+       const fallbackResp = await fetch(`${BASE}/PresentacionEstadistica/GetAvanzadaCanditados`,{
+         method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+         body:JSON.stringify(fallbackPayload),
+         next:{revalidate:86400}
+       });
+       if(fallbackResp.ok) rows = ((await fallbackResp.json()).data??[]);
+     }
+     const matched = rows.filter((item:any)=>sameOfficialIdentity(personal, item));
+     return {ok:true,rows:matched.map((item:any)=>({...item,idProcesoHistorico:process.id,intAnioProceso:process.year,strProcesoHistorico:process.name,strFuenteHistorica:historicalCvSource}))};
     }catch{return {ok:false,rows:[]}}
    })):[];
    const identifiedHistory=historicalResponses.flatMap((result:any)=>result.rows).sort((a:any,b:any)=>b.intAnioProceso-a.intAnioProceso);
@@ -227,11 +251,11 @@ export async function GET(req:NextRequest){
     electedRoles,
     electedRoleCatalog:h.lCargoElecHistorico??[],
     officialElectionHistory,
-    officialHistoryStatus:historySuccesses===HISTORICAL_ERM_PROCESSES.length?(historicalCvFailures||proclamationFailures?"partial":"complete"):historySuccesses?"partial":"unavailable",
+    officialHistoryStatus:historySuccesses>0?(historicalCvFailures||proclamationFailures?"partial":"complete"):"unavailable",
     // Diagnóstico interno del pipeline: no se representa en la interfaz.
     pipelineStatus:{
      djhv:"RECORDS_FOUND",
-     historical:historySuccesses===HISTORICAL_ERM_PROCESSES.length?"RECORDS_FOUND":historySuccesses?"SOURCE_ERROR":"NOT_QUERIED",
+     historical:historySuccesses===HISTORICAL_PROCESSES.length?"RECORDS_FOUND":historySuccesses?"SOURCE_ERROR":"NOT_QUERIED",
      identityMatches:identifiedHistory.length,
      authorities:enrichments.map((item:any)=>item.authorityQueryStatus),
      counts:{employment:labor.length,politicalRoles:partyRoles.length,electedOffices:electedRoles.length,elections:officialElectionHistory.length,organizations:resignations.length}
