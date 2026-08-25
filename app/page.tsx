@@ -1310,15 +1310,17 @@ export default function Home() {
         </div>
         <div className="global-search-wrap">
           <label className="search">
-            <b>⌕</b>
+            <b aria-hidden="true">⌕</b>
             <input
+              id="global-candidate-search"
+              aria-label="Buscar candidato, organización o expediente"
               value={query}
               onFocus={()=>setSearchFocused(true)}
               onBlur={()=>setTimeout(()=>setSearchFocused(false),180)}
               onChange={(e) => {setQuery(e.target.value);setSearchFocused(true)}}
               placeholder="Buscar candidato, organización o expediente…"
             />
-            {candidateSearchLoading&&<i className="search-spinner"/>}
+            {candidateSearchLoading&&<i className="search-spinner" aria-hidden="true"/>}
           </label>
           {searchFocused&&query.trim().length>=3&&<div className="candidate-suggestions">
             <header><strong>Candidatos encontrados</strong><span>Búsqueda nacional · ERM 2026</span></header>
@@ -1335,8 +1337,8 @@ export default function Home() {
           <div><small>FALTAN PARA LAS ELECCIONES</small><span>04 OCT 2026</span></div>
           {[['DÍAS',clock.days],['HORAS',clock.hours],['MIN',clock.minutes],['SEG',clock.seconds]].map(([label,value])=><b key={String(label)}><strong>{String(value).padStart(2,'0')}</strong><em>{label}</em></b>)}
         </div>
-        <button className="radar-entry" type="button" onClick={openRadar}>✦ Radar Estratégico TI<small>Prioridades y oportunidades tecnológicas</small></button>
-        <div className="official-head"><i /> JNE · PROCESO 126</div>
+        <button className="radar-entry" type="button" onClick={openRadar}><span aria-hidden="true">✦ </span>Radar Estratégico TI<small>Prioridades y oportunidades tecnológicas</small></button>
+        <div className="official-head"><i aria-hidden="true" /> JNE · PROCESO 126</div>
       </header>
       <div className="national-shell">
         <aside className="national-side">
@@ -1344,7 +1346,7 @@ export default function Home() {
           <h2>Perú</h2>
           <div className="territory-finder" ref={territoryFinderRef}>
             <label>Buscar territorio
-              <div><span>⌕</span><input value={territoryQuery} onFocus={()=>setTerritoryOpen(true)} onChange={(event)=>{setTerritoryQuery(event.target.value);setTerritoryOpen(true)}} placeholder="Departamento, provincia o distrito…" /></div>
+              <div><span aria-hidden="true">⌕</span><input aria-label="Buscar departamento, provincia o distrito" value={territoryQuery} onFocus={()=>setTerritoryOpen(true)} onChange={(event)=>{setTerritoryQuery(event.target.value);setTerritoryOpen(true)}} placeholder="Departamento, provincia o distrito…" /></div>
             </label>
             {territoryOpen && territoryQuery.trim().length >= 2 && <div className="territory-suggestions">
               {territoryLoading ? <p>Preparando búsqueda territorial…</p> : territoryError ? <p>{territoryError}</p> : territoryMatches.length ? territoryMatches.map((item:any)=><button type="button" key={`${item.level}-${item.dep}-${item.prov}-${item.dist}`} onClick={()=>chooseTerritory(item)}><small>{item.level}</small><strong>{fmt(item.name)}</strong><span>{fmt(item.hierarchy)}</span></button>) : <p>No se encontraron coincidencias territoriales.</p>}
@@ -1433,7 +1435,7 @@ export default function Home() {
             <em>›</em>
           </a>
           <div className="process-card">
-            <b>✓ Proceso verificado</b>
+            <b><span aria-hidden="true">✓</span> Proceso verificado</b>
             <span>Elecciones Regionales y Municipales 2026</span>
             <small>ERM.2026 · ID 126</small>
             <em>No corresponde a primarias</em>
@@ -1441,8 +1443,9 @@ export default function Home() {
           <a
             href="https://plataformahistorico.jne.gob.pe/ListaDeCandidatos/"
             target="_blank"
+            rel="noopener noreferrer"
           >
-            Abrir fuente oficial ↗
+            Abrir fuente oficial <span aria-hidden="true">↗</span>
           </a>
         </aside>
         <section className="national-content">
@@ -1530,7 +1533,7 @@ export default function Home() {
           </section>
           <div className="metrics">
             <article>
-              <b className="blue">▤</b>
+              <b className="blue" aria-hidden="true">▤</b>
               <div>
                 <small>Listas encontradas</small>
                 <strong>{lists.length}</strong>
@@ -1538,7 +1541,7 @@ export default function Home() {
               </div>
             </article>
             <article>
-              <b className="violet">◎</b>
+              <b className="violet" aria-hidden="true">◎</b>
               <div>
                 <small>Organizaciones</small>
                 <strong>{orgs}</strong>
@@ -1546,7 +1549,7 @@ export default function Home() {
               </div>
             </article>
             <article>
-              <b className="orange">♟</b>
+              <b className="orange" aria-hidden="true">♟</b>
               <div>
                 <small>Integrantes reportados</small>
                 <strong>{cands.toLocaleString("es-PE")}</strong>
@@ -1554,7 +1557,7 @@ export default function Home() {
               </div>
             </article>
             <article>
-              <b className="green">⌖</b>
+              <b className="green" aria-hidden="true">⌖</b>
               <div>
                 <small>Cobertura nacional</small>
                 <strong>25</strong>
@@ -1595,16 +1598,18 @@ export default function Home() {
                 <button
                   className={listView === "lists" ? "active" : ""}
                   onClick={() => setListView("lists")}
+                  aria-pressed={listView === "lists"}
                 >
-                  <b>▤</b>
+                  <b aria-hidden="true">▤</b>
                   <span>Por listas</span>
                   <em>{filtered.length}</em>
                 </button>
                 <button
                   className={listView === "principals" ? "active" : ""}
                   onClick={() => setListView("principals")}
+                  aria-pressed={listView === "principals"}
                 >
-                  <b>♙</b>
+                  <b aria-hidden="true">♙</b>
                   <span>Por cargo principal</span>
                   <em>{principalsLoading ? "…" : filteredPrincipals.length}</em>
                 </button>
@@ -2188,9 +2193,9 @@ export default function Home() {
                     <a
                       href="https://plataformahistorico.jne.gob.pe/ListaDeCandidatos/"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
-                      Abrir fuente oficial ↗
+                      Abrir fuente oficial <span aria-hidden="true">↗</span>
                     </a>
                   </footer>
                 </>

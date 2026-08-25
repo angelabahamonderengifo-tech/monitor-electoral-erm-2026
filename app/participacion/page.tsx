@@ -159,12 +159,12 @@ export default function ParticipationPage() {
         <div className="brand"><div className="brand-company-logo"><img src="/nextnet-logo.png" alt="Nextnet · Conectando el futuro" /></div><div><strong>Monitor Electoral Territorial</strong><small>Cobertura nacional · ERM 2026</small></div></div>
         <div className="participation-head-title"><strong>Resumen de participación política</strong><small>Consolidado oficial de listas · JNE</small></div>
         <div className="election-clock"><div><small>FALTAN PARA LAS ELECCIONES</small><span>04 OCT 2026</span></div>{[['DÍAS',clock.days],['HORAS',clock.hours],['MIN',clock.minutes],['SEG',clock.seconds]].map(([label,value])=><b key={String(label)}><strong>{String(value).padStart(2,'0')}</strong><em>{label}</em></b>)}</div>
-        <button className="radar-entry" type="button" onClick={()=>setRadarOpen(true)}>✦ Radar Estratégico TI<small>Prioridades y oportunidades tecnológicas</small></button>
-        <div className="official-head"><i /> JNE · PROCESO 126</div>
+        <button className="radar-entry" type="button" onClick={()=>setRadarOpen(true)}><span aria-hidden="true">✦ </span>Radar Estratégico TI<small>Prioridades y oportunidades tecnológicas</small></button>
+        <div className="official-head"><i aria-hidden="true" /> JNE · PROCESO 126</div>
       </header>
       <div className="national-shell">
         <aside className="national-side participation-side">
-          <p className="eyebrow">NAVEGACIÓN</p><h2>Participación política</h2>
+          <p className="eyebrow">NAVEGACIÓN</p><h2>Perú</h2>
           <a className="back-monitor" href="/">← Volver al monitor territorial</a>
           <p className="filter-heading">FILTROS DEL DASHBOARD</p>
           <label>Organización política<select value={organization} onChange={(event) => { setOrganization(event.target.value); setSelected(null); }}><option value="">Seleccionar</option>{data?.data?.organizations?.map((item: Organization) => <option key={item.id} value={item.id}>{fmt(item.name)}</option>)}</select></label>
@@ -176,7 +176,7 @@ export default function ParticipationPage() {
           <label>Cargo electoral<select value={role} onChange={(event) => setRole(event.target.value)}><option value="">Seleccionar</option>{roles.map((item) => <option key={item}>{fmt(item)}</option>)}</select></label>
           <label>Estado del registro<select value={status} onChange={(event) => setStatus(event.target.value)}><option value="">Seleccionar</option>{statuses.map((item) => <option key={item}>{fmt(item)}</option>)}</select></label>
           <button className="national-clear" onClick={clearFilters}>Limpiar filtros</button>
-          <div className="process-card"><b>✓ Fuente oficial</b><span>Jurado Nacional de Elecciones</span><small>ERM.2026 · ID 126</small><em>Consulta dinámica</em></div>
+          <div className="process-card"><b><span aria-hidden="true">✓</span> Fuente oficial</b><span>Jurado Nacional de Elecciones</span><small>ERM.2026 · ID 126</small><em>Consulta dinámica</em></div>
         </aside>
         <section className="participation-content">
           <div className="crumbs">Monitor de Elecciones <b>›</b> Resumen de participación política</div>
