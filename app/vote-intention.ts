@@ -32,9 +32,9 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-21",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "18" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "15" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 20 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 20, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "AVANZA PAÍS", percentage: 16.6, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "SOMOS PERÚ", percentage: 15.3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
       { organization: "PARTIDO MORADO", percentage: 7.7 },
@@ -47,10 +47,10 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-21",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "12" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "10" },
     entries: [
       { organization: "SOMOS PERÚ", percentage: 21.7, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "RENOVACIÓN POPULAR", percentage: 12.3 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 12.3, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "PARTIDO FE EN EL PERÚ", percentage: 3.7 },
       { organization: "ACCIÓN POPULAR", percentage: 2.3 },
     ],
@@ -60,11 +60,11 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-04",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "39" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "42" },
     entries: [
       { organization: "AVANZA PAÍS", percentage: 26.1, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "JUNTOS POR EL PERÚ", percentage: 8.3 },
-      { organization: "RENOVACIÓN POPULAR", percentage: 7.5 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 7.5, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "PODEMOS PERÚ", percentage: 4.2 },
       { organization: "PARTIDO DEL BUEN GOBIERNO", percentage: 3.4 },
     ],
@@ -74,7 +74,7 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-14",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "21" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "17" },
     entries: [
       { organization: "SOMOS PERÚ", percentage: 24.8, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
       { organization: "PARTIDO POPULAR CRISTIANO", percentage: 6.4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
@@ -87,10 +87,10 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-19",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "40" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "30" },
     entries: [
       { organization: "SOMOS PERÚ", percentage: 30.6, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "RENOVACIÓN POPULAR", percentage: 22.6 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 22.6, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "AVANZA PAÍS", percentage: 8.6, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "PARTIDO POPULAR CRISTIANO", percentage: 4.9, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
       { organization: "AHORA NACIÓN", percentage: 2.9, aliases: ["AHORA NACION - AN"] },
@@ -102,9 +102,9 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-19",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "31" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "40" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 26.7 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 26.7, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "ACCIÓN POPULAR", percentage: 14.7 },
       { organization: "SOMOS PERÚ", percentage: 12.3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
       { organization: "AVANZA PAÍS", percentage: 7.3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
@@ -116,9 +116,9 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-18",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "27" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "24" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 17.3 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 17.3, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "SOMOS PERÚ", percentage: 14.7, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
       { organization: "AVANZA PAÍS", percentage: 11.7, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
@@ -129,9 +129,9 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
     measuredAt: "2026-08-23",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "35" },
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "26" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 15.3 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 15.3, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "AVANZA PAÍS", percentage: 10.5, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "ACCIÓN POPULAR", percentage: 8.7 },
       { organization: "SOMOS PERÚ", percentage: 7.5, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
@@ -149,7 +149,7 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
       provinceCode: "01",
     },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 21 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 21, aliases: ["RENOVACION POPULAR PERU"] },
       { organization: "SOMOS PERÚ", percentage: 13 },
       { organization: "AVANZA PAÍS", percentage: 9 },
       { organization: "PODEMOS PERÚ", percentage: 7 },
