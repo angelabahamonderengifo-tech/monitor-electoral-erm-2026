@@ -44,6 +44,21 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
+    // Vinext's RSC plugin can otherwise prebundle a second React instance in
+    // development. Keeping React out of the dependency optimizer prevents the
+    // null hook dispatcher seen by the self-hosted STAGING server.
+    resolve: {
+      dedupe: ["react", "react-dom", "react-server-dom-webpack"],
+    },
+    optimizeDeps: {
+      exclude: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "react-server-dom-webpack",
+      ],
+    },
     server: {
       host: "0.0.0.0",
       allowedHosts: ["terminal.local", "monitorelectoral.rlizarbe.com"],
