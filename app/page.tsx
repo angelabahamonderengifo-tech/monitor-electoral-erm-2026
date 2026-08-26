@@ -1,5 +1,9 @@
 "use client";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  findVoteIntentionMeasurement,
+  voteIntentionForOrganization,
+} from "./vote-intention";
 type Opt = { code: string; name: string };
 type List = Record<string, any>;
 type Candidate = Record<string, any>;
@@ -1188,17 +1192,56 @@ export default function Home() {
     "TODOS",
     ...Array.from(new Set(lists.map((x) => x.strEstadoLista))),
   ];
-  const filtered = useMemo(
+  const voteIntentionMeasurement = useMemo(
     () =>
-      lists.filter(
+      findVoteIntentionMeasurement({
+        level: level as "4" | "5" | "6",
+        departmentCode: dep,
+        provinceCode: level === "4" ? undefined : prov,
+        districtCode: level === "6" ? dist : undefined,
+      }),
+    [dep, dist, level, prov],
+  );
+  const voteIntentionByList = useMemo(() => {
+    const measuredLists = lists
+      .map((list) => ({
+        list,
+        entry: voteIntentionForOrganization(
+          voteIntentionMeasurement,
+          list.strOrganizacionPolitica || "",
+        ),
+      }))
+      .filter((item) => item.entry)
+      .sort((a, b) => b.entry!.percentage - a.entry!.percentage);
+
+    return new Map(
+      measuredLists.map((item, index) => [
+        item.list.idExpediente,
+        { percentage: item.entry!.percentage, rank: index + 1 },
+      ]),
+    );
+  }, [lists, voteIntentionMeasurement]);
+  const filtered = useMemo(
+    () => {
+      const matchingLists = lists.filter(
         (l) =>
           (status === "TODOS" || l.strEstadoLista === status) &&
           (!query ||
             (l.strOrganizacionPolitica + " " + l.strCodExpediente)
               .toLowerCase()
               .includes(query.toLowerCase())),
-      ),
-    [lists, status, query],
+      );
+      if (!voteIntentionMeasurement) return matchingLists;
+      return [...matchingLists].sort((a, b) => {
+        const aMeasurement = voteIntentionByList.get(a.idExpediente);
+        const bMeasurement = voteIntentionByList.get(b.idExpediente);
+        if (!aMeasurement && !bMeasurement) return 0;
+        if (!aMeasurement) return 1;
+        if (!bMeasurement) return -1;
+        return bMeasurement.percentage - aMeasurement.percentage;
+      });
+    },
+    [lists, query, status, voteIntentionByList, voteIntentionMeasurement],
   );
   const filteredPrincipals = useMemo(
     () =>
@@ -1594,6 +1637,24 @@ export default function Home() {
                   ))}
                 </select>
               </div>
+              {listView === "lists" && lists.length > 0 && (
+                <div className="vote-intention-summary">
+                  {voteIntentionMeasurement ? (
+                    <>
+                      <span>
+                        Ordenado por intención de voto según {voteIntentionMeasurement.pollster} · Última medición: {new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${voteIntentionMeasurement.measuredAt}T12:00:00`))} ⓘ
+                      </span>
+                      {voteIntentionMeasurement.analysisHref && (
+                        <a href={voteIntentionMeasurement.analysisHref}>
+                          Ver análisis de intención de voto →
+                        </a>
+                      )}
+                    </>
+                  ) : (
+                    <span>No se registra medición de intención de voto disponible para esta elección.</span>
+                  )}
+                </div>
+              )}
               <div className="electoral-view-toggle" role="group" aria-label="Forma de visualizar candidaturas">
                 <button
                   className={listView === "lists" ? "active" : ""}
@@ -1624,8 +1685,9 @@ export default function Home() {
                   </p>
                 </div>
               ) : listView === "lists" ? (
-                <div className="national-lists">
-                  {filtered.map((l) => (
+                <>
+                  <div className={"national-lists" + (voteIntentionMeasurement ? " has-vote-intention" : "")}>
+                    {filtered.map((l) => (
                     <button
                       key={l.idExpediente}
                       className={
@@ -1642,6 +1704,12 @@ export default function Home() {
                           </small>
                         </div>
                       </div>
+                      {voteIntentionMeasurement && voteIntentionByList.get(l.idExpediente) && (
+                        <span className="vote-intention-value" aria-label={`Puesto ${voteIntentionByList.get(l.idExpediente)!.rank}, ${voteIntentionByList.get(l.idExpediente)!.percentage}% de intención de voto`}>
+                          <small>{voteIntentionByList.get(l.idExpediente)!.rank}</small>
+                          <strong>{voteIntentionByList.get(l.idExpediente)!.percentage.toFixed(1)}%</strong>
+                        </span>
+                      )}
                       <span
                         className={"plan-dot " + getPlanState(l).kind}
                         title={"Plan de gobierno: " + getPlanState(l).label}
@@ -1661,8 +1729,17 @@ export default function Home() {
                       </span>
                       <b>›</b>
                     </button>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  {voteIntentionMeasurement && (
+                    <footer className="vote-intention-disclaimer">
+                      <span>Las encuestas son estudios de intención de voto y no constituyen predicción electoral.</span>
+                      {voteIntentionMeasurement.methodologyHref && (
+                        <a href={voteIntentionMeasurement.methodologyHref}>Ver aviso metodológico ↗</a>
+                      )}
+                    </footer>
+                  )}
+                </>
               ) : principalsLoading ? (
                 <div className="principals-loading">
                   <span>♙</span>
