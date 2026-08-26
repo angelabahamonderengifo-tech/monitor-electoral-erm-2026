@@ -28,7 +28,32 @@ const normalize = (value: string) =>
 
 // Se registran mediciones solamente después de validar su fuente, fecha y
 // correspondencia exacta con la circunscripción electoral.
-export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [];
+export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
+  {
+    pollster: "Ipsos",
+    measuredAt: "2026-08-06",
+    territory: {
+      level: "5",
+      departmentCode: "14",
+      provinceCode: "01",
+    },
+    entries: [
+      { organization: "RENOVACIÓN POPULAR", percentage: 21 },
+      { organization: "SOMOS PERÚ", percentage: 13 },
+      { organization: "AVANZA PAÍS", percentage: 9 },
+      { organization: "PODEMOS PERÚ", percentage: 7 },
+      { organization: "FUERZA POPULAR", percentage: 6 },
+      { organization: "AHORA NACIÓN", percentage: 6 },
+      { organization: "OBRAS", percentage: 5 },
+      { organization: "ACCIÓN POPULAR", percentage: 2 },
+      { organization: "JUNTOS POR EL PERÚ", percentage: 2 },
+    ],
+    analysisHref:
+      "https://www.ipsos.com/es-pe/encuesta-de-intencion-de-voto-para-alcalde-de-lima-agosto-2026",
+    methodologyHref:
+      "https://www.ipsos.com/sites/default/files/ct/news/documents/2026-08/Encuesta%20Elecciones%20Municipales%20Agosto%20de%202026%20V3.pdf",
+  },
+];
 
 export function findVoteIntentionMeasurement(
   territory: VoteIntentionMeasurement["territory"],
