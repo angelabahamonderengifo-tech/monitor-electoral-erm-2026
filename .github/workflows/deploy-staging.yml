@@ -16,26 +16,5 @@ jobs:
     runs-on: [self-hosted, linux, x64, angela-staging]
     timeout-minutes: 15
     steps:
-      - name: Stop STAGING before dependency refresh
-        shell: bash
-        run: |
-          app_pid="$(pgrep -f '/opt/angela/staging/.*[v]ite' | head -n 1 || true)"
-          if [[ -z "$app_pid" ]]; then
-            exit 0
-          fi
-
-          service_unit="$(awk -F/ '/system\.slice/ { print $NF; exit }' "/proc/$app_pid/cgroup")"
-          if [[ -z "$service_unit" || "$service_unit" != *.service ]]; then
-            echo "Could not resolve the STAGING systemd service for PID $app_pid" >&2
-            exit 1
-          fi
-
-          echo "STAGING_SERVICE_UNIT=$service_unit" >> "$GITHUB_ENV"
-          sudo systemctl stop "$service_unit"
-
       - name: Deploy STAGING
         run: sudo /usr/local/sbin/update-angela-staging
-
-      - name: Restore STAGING after a failed deployment
-        if: failure() && env.STAGING_SERVICE_UNIT != ''
-        run: sudo systemctl start "$STAGING_SERVICE_UNIT"
