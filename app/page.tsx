@@ -4,6 +4,7 @@ import {
   findVoteIntentionMeasurement,
   voteIntentionForOrganization,
 } from "./vote-intention";
+import { signalsForTerritory } from "./territorial-signals";
 type Opt = { code: string; name: string };
 type List = Record<string, any>;
 type Candidate = Record<string, any>;
@@ -1202,6 +1203,16 @@ export default function Home() {
       }),
     [dep, dist, level, prov],
   );
+  const activeTerritorialSignals = useMemo(
+    () =>
+      signalsForTerritory({
+        level: level as "4" | "5" | "6",
+        departmentCode: dep,
+        provinceCode: level === "4" ? undefined : prov,
+        districtCode: level === "6" ? dist : undefined,
+      }),
+    [dep, dist, level, prov],
+  );
   const voteIntentionByList = useMemo(() => {
     const measuredLists = lists
       .map((list) => ({
@@ -1930,6 +1941,38 @@ export default function Home() {
               )}
             </aside>
           </div>
+          {territory && (
+            <section className="territorial-signals" aria-labelledby="territorial-signals-title">
+              <div className="territorial-signals-head">
+                <div>
+                  <p>SEGUIMIENTO LOCAL</p>
+                  <h2 id="territorial-signals-title">Señales territoriales</h2>
+                  <span>Reportes con fuente pública y ámbito verificable · No representan intención de voto.</span>
+                </div>
+                <span className="territorial-signals-territory">{territory}</span>
+              </div>
+              {!activeTerritorialSignals.length ? (
+                <div className="territorial-signals-empty">
+                  <b>Aún no se registran señales verificadas para este territorio.</b>
+                  <span>Los reportes se mostrarán con fecha, fuente y estado de verificación, sin porcentajes ni ranking.</span>
+                </div>
+              ) : (
+                <div className="territorial-signals-list">
+                  {activeTerritorialSignals.map((signal) => (
+                    <article key={`${signal.occurredAt}-${signal.sourceHref}`}>
+                      <div>
+                        <small>{new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${signal.occurredAt}T12:00:00`))}</small>
+                        <h3>{signal.title}</h3>
+                        <p>{signal.summary}</p>
+                        <a href={signal.sourceHref} target="_blank" rel="noreferrer">Fuente: {signal.sourceName} ↗</a>
+                      </div>
+                      <span className={"signal-status " + signal.verification}>{signal.verification === "verificada" ? "Verificada" : "En revisión"}</span>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
         </section>
       </div>
       {person && (
