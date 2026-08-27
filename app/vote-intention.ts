@@ -359,6 +359,91 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     specialCaseNote:
       "Medición sobre escenario electoral con movimientos y renuncias estratégicas en la conformación de listas municipales.",
   },
+  {
+    pollster: "ICOP Perú",
+    measuredAt: "2026-08-22",
+    territory: { level: "4", departmentCode: "07" },
+    entries: [
+      {
+        organization: "ALIANZA ELECTORAL VENCEREMOS",
+        percentage: 24.1,
+        rank: 1,
+        aliases: ["VENCEREMOS"],
+      },
+      {
+        organization: "PARTIDO POLITICO PRIN",
+        percentage: 14.6,
+        rank: 2,
+        aliases: ["PRIN"],
+      },
+      {
+        organization: "PROGRESEMOS",
+        percentage: 6.2,
+        rank: 3,
+        aliases: ["PARTIDO POLITICO PROGRESEMOS"],
+      },
+    ],
+    analysisHref: "https://www.facebook.com/QosqoTimes",
+    methodologyHref: "https://www.facebook.com/QosqoTimes",
+    specialCaseNote:
+      "Estudio regional con 912 encuestas y margen de error de ±3.2% (Registro 0385-REE/JNE).",
+  },
+  {
+    pollster: "ICOP Perú",
+    measuredAt: "2026-08-22",
+    territory: { level: "5", departmentCode: "07", provinceCode: "01" },
+    entries: [
+      {
+        organization: "PERÚ PRIMERO",
+        percentage: 12.6,
+        rank: 1,
+        aliases: ["PARTIDO POLITICO PERU PRIMERO", "PERU PRIMERO"],
+        specialCase: {
+          type: "empate_tecnico",
+          candidateName: "William Peña",
+          description:
+            "Empate técnico con el segundo lugar al registrar una diferencia (0.1%) menor al margen de error muestral (±4.0%).",
+        },
+      },
+      {
+        organization: "PARTIDO POLITICO PRIN",
+        percentage: 12.5,
+        rank: 2,
+        aliases: ["PRIN"],
+        specialCase: {
+          type: "empate_tecnico",
+          candidateName: "Albert Arenas",
+          description:
+            "Empate técnico con el primer lugar al registrar una diferencia (0.1%) menor al margen de error muestral (±4.0%).",
+        },
+      },
+      {
+        organization: "ALIANZA ELECTORAL VENCEREMOS",
+        percentage: 8.2,
+        rank: 3,
+        aliases: ["VENCEREMOS"],
+      },
+      {
+        organization: "AHORA NACIÓN",
+        percentage: 5.8,
+        rank: 4,
+        aliases: ["AHORA NACION - AN", "AHORA NACION"],
+      },
+      {
+        organization: "FRENTE REGIONAL TÚPAC",
+        percentage: 4,
+        rank: 5,
+        aliases: [
+          "MOVIMIENTO REGIONAL FRENTE REGIONAL TUPAC",
+          "FRENTE REGIONAL TUPAC",
+        ],
+      },
+    ],
+    analysisHref: "https://www.facebook.com/QosqoTimes",
+    methodologyHref: "https://www.facebook.com/QosqoTimes",
+    specialCaseNote:
+      "Escenario de empate técnico entre el primer y segundo lugar dentro del margen de error (±4.0% · Registro 0385-REE/JNE).",
+  },
 ];
 
 const TOP_TIER_POLLSTERS = new Set(["IPSOS", "CPI", "DATUM"]);
