@@ -1234,6 +1234,7 @@ export default function Home() {
           // Conservamos su puesto publicado en vez de recalcularlo solo entre
           // las organizaciones que el Monitor logra vincular.
           rank: item.entry!.rank ?? index + 1,
+          specialCase: item.entry!.specialCase,
         },
       ]),
     );
@@ -1660,6 +1661,11 @@ export default function Home() {
                     <>
                       <span>
                         Ordenado por intención de voto según {voteIntentionMeasurement.pollster} · Última medición: {new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${voteIntentionMeasurement.measuredAt}T12:00:00`))} ⓘ
+                        {voteIntentionMeasurement.specialCaseNote && (
+                          <span style={{ display: "block", marginTop: "3px", color: "#854d0e", fontWeight: 500 }}>
+                            ⚠️ {voteIntentionMeasurement.specialCaseNote}
+                          </span>
+                        )}
                       </span>
                       {voteIntentionMeasurement.analysisHref && (
                         <a href={voteIntentionMeasurement.analysisHref}>
@@ -1722,9 +1728,16 @@ export default function Home() {
                         </div>
                       </div>
                       {voteIntentionMeasurement && voteIntentionByList.get(l.idExpediente) && (
-                        <span className="vote-intention-value" aria-label={`Puesto ${voteIntentionByList.get(l.idExpediente)!.rank}, ${voteIntentionByList.get(l.idExpediente)!.percentage}% de intención de voto`}>
+                        <span
+                          className="vote-intention-value"
+                          aria-label={`Puesto ${voteIntentionByList.get(l.idExpediente)!.rank}, ${voteIntentionByList.get(l.idExpediente)!.percentage}% de intención de voto`}
+                          title={voteIntentionByList.get(l.idExpediente)!.specialCase ? `[Caso especial - ${voteIntentionByList.get(l.idExpediente)!.specialCase!.type.replace(/_/g, " ")}]: ${voteIntentionByList.get(l.idExpediente)!.specialCase!.description} (${voteIntentionByList.get(l.idExpediente)!.specialCase!.candidateName})` : undefined}
+                        >
                           <small>{voteIntentionByList.get(l.idExpediente)!.rank}</small>
                           <strong>{voteIntentionByList.get(l.idExpediente)!.percentage.toFixed(1)}%</strong>
+                          {voteIntentionByList.get(l.idExpediente)!.specialCase && (
+                            <span style={{ marginLeft: "2px", color: "#d97706", fontSize: "9px" }} aria-label="Caso especial">⚠️</span>
+                          )}
                         </span>
                       )}
                       <span
