@@ -198,58 +198,7 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     specialCaseNote:
       "Medición distrital con candidatura de autoridad en funciones evaluada en la intención de voto.",
   },
-  {
-    pollster: "IMASOLU",
-    measuredAt: "2026-08-14",
-    territory: {
-      level: "5",
-      departmentCode: "14",
-      provinceCode: "01",
-    },
-    entries: [
-      {
-        organization: "SOMOS PERÚ",
-        percentage: 17.33,
-        rank: 1,
-        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
-      },
-      { organization: "FUERZA POPULAR", percentage: 12.83, rank: 2 },
-      {
-        organization: "RENOVACIÓN POPULAR",
-        percentage: 12.67,
-        rank: 3,
-        aliases: ["RENOVACION POPULAR PERU"],
-        specialCase: {
-          type: "renuncia_cabeza_lista",
-          candidateName: "Luis Rubio / Rafael López Aliaga",
-          description: "Renuncia del candidato titular a la alcaldía para posibilitar la asunción del primer regidor.",
-        },
-      },
-      {
-        organization: "AVANZA PAÍS",
-        percentage: 11.17,
-        rank: 4,
-        aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"],
-      },
-      {
-        organization: "OBRAS",
-        percentage: 8.83,
-        rank: 5,
-        aliases: ["PARTIDO CIVICO OBRAS"],
-      },
-      {
-        organization: "PODEMOS PERÚ",
-        percentage: 7.83,
-        rank: 6,
-        aliases: ["PODEMOS PERU"],
-      },
-      { organization: "ACCIÓN POPULAR", percentage: 5.17, rank: 7 },
-    ],
-    analysisHref:
-      "https://imasolu.com/portfolio/evaluacion-electoral-en-lima-metropolitana-julio-2026-candidatos-distritales-comienzan-a-definir-el-mapa-municipal-de-lima-metropolitana/",
-    methodologyHref:
-      "https://imasolu.com/wp-content/uploads/2026/08/VM-EVALUACION-ELECTORAL-DE-LIMA-Y-CALLAO-Agosto-2026-2.pdf",
-  },
+
   {
     pollster: "IMASOLU",
     measuredAt: "2026-08-14",
@@ -349,6 +298,11 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   },
 ];
 
+const TOP_TIER_POLLSTERS = new Set(["IPSOS", "CPI", "DATUM"]);
+
+const pollsterTier = (pollster: string) =>
+  TOP_TIER_POLLSTERS.has(pollster.toUpperCase().trim()) ? 1 : 2;
+
 export function findVoteIntentionMeasurement(
   territory: VoteIntentionMeasurement["territory"],
 ) {
@@ -360,10 +314,13 @@ export function findVoteIntentionMeasurement(
         measurement.territory.provinceCode === territory.provinceCode &&
         measurement.territory.districtCode === territory.districtCode,
     )
-    .sort(
-      (a, b) =>
-        new Date(b.measuredAt).getTime() - new Date(a.measuredAt).getTime(),
-    )[0];
+    .sort((a, b) => {
+      // 1. Jerarquía de Fuentes: Nivel 1 (Ipsos, CPI, Datum) precede obligatoriamente a Nivel 2 (REE locales)
+      const tierDiff = pollsterTier(a.pollster) - pollsterTier(b.pollster);
+      if (tierDiff !== 0) return tierDiff;
+      // 2. Si son del mismo nivel, priorizar la medición más reciente
+      return new Date(b.measuredAt).getTime() - new Date(a.measuredAt).getTime();
+    })[0];
 }
 
 export function voteIntentionForOrganization(
