@@ -1228,7 +1228,13 @@ export default function Home() {
     return new Map(
       measuredLists.map((item, index) => [
         item.list.idExpediente,
-        { percentage: item.entry!.percentage, rank: index + 1 },
+        {
+          percentage: item.entry!.percentage,
+          // CPI/Ipsos pueden reportar candidatos sin una lista JNE conciliada.
+          // Conservamos su puesto publicado en vez de recalcularlo solo entre
+          // las organizaciones que el Monitor logra vincular.
+          rank: item.entry!.rank ?? index + 1,
+        },
       ]),
     );
   }, [lists, voteIntentionMeasurement]);

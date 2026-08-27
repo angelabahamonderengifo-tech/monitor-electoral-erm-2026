@@ -12,10 +12,18 @@ export type VoteIntentionMeasurement = {
   entries: Array<{
     organization: string;
     percentage: number;
+    /** Puesto en el reporte de la encuestadora, no solo entre listas conciliadas. */
+    rank?: number;
     aliases?: string[];
+    specialCase?: {
+      type: "teniente_alcalde" | "renuncia_cabeza_lista" | "empate_tecnico" | "arrastre_gestion";
+      candidateName?: string;
+      description: string;
+    };
   }>;
   analysisHref?: string;
   methodologyHref?: string;
+  specialCaseNote?: string;
 };
 
 const normalize = (value: string) =>
@@ -34,12 +42,12 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-21",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "15" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 20, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 16.6, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "SOMOS PERÚ", percentage: 15.3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "PARTIDO MORADO", percentage: 7.7 },
-      { organization: "ACCIÓN POPULAR", percentage: 4.7 },
-      { organization: "PARTIDO DEL BUEN GOBIERNO", percentage: 2 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 20, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 16.6, rank: 2, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "SOMOS PERÚ", percentage: 15.3, rank: 3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "PARTIDO MORADO", percentage: 7.7, rank: 4 },
+      { organization: "ACCIÓN POPULAR", percentage: 4.7, rank: 5 },
+      { organization: "PARTIDO DEL BUEN GOBIERNO", percentage: 2, rank: 6 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -49,10 +57,10 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-21",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "10" },
     entries: [
-      { organization: "SOMOS PERÚ", percentage: 21.7, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "RENOVACIÓN POPULAR", percentage: 12.3, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "PARTIDO FE EN EL PERÚ", percentage: 3.7 },
-      { organization: "ACCIÓN POPULAR", percentage: 2.3 },
+      { organization: "SOMOS PERÚ", percentage: 21.7, rank: 1, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "RENOVACIÓN POPULAR", percentage: 12.3, rank: 3, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "PARTIDO FE EN EL PERÚ", percentage: 3.7, rank: 4 },
+      { organization: "ACCIÓN POPULAR", percentage: 2.3, rank: 5 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -62,11 +70,11 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-04",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "42" },
     entries: [
-      { organization: "AVANZA PAÍS", percentage: 26.1, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "JUNTOS POR EL PERÚ", percentage: 8.3 },
-      { organization: "RENOVACIÓN POPULAR", percentage: 7.5, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "PODEMOS PERÚ", percentage: 4.2 },
-      { organization: "PARTIDO DEL BUEN GOBIERNO", percentage: 3.4 },
+      { organization: "AVANZA PAÍS", percentage: 26.1, rank: 1, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "JUNTOS POR EL PERÚ", percentage: 8.3, rank: 3 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 7.5, rank: 4, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "PODEMOS PERÚ", percentage: 4.2, rank: 5 },
+      { organization: "PARTIDO DEL BUEN GOBIERNO", percentage: 3.4, rank: 6 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -76,10 +84,10 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-14",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "17" },
     entries: [
-      { organization: "SOMOS PERÚ", percentage: 24.8, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 6.4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
-      { organization: "AVANZA PAÍS", percentage: 3.2, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "PODEMOS PERÚ", percentage: 2.4 },
+      { organization: "SOMOS PERÚ", percentage: 24.8, rank: 1, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 6.4, rank: 3, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
+      { organization: "AVANZA PAÍS", percentage: 3.2, rank: 4, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PODEMOS PERÚ", percentage: 2.4, rank: 5 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -89,12 +97,12 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-19",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "30" },
     entries: [
-      { organization: "SOMOS PERÚ", percentage: 30.6, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "RENOVACIÓN POPULAR", percentage: 22.6, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 8.6, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 4.9, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
-      { organization: "AHORA NACIÓN", percentage: 2.9, aliases: ["AHORA NACION - AN"] },
-      { organization: "ACCIÓN POPULAR", percentage: 2.3 },
+      { organization: "SOMOS PERÚ", percentage: 30.6, rank: 1, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "RENOVACIÓN POPULAR", percentage: 22.6, rank: 2, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 8.6, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 4.9, rank: 4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
+      { organization: "AHORA NACIÓN", percentage: 2.9, rank: 5, aliases: ["AHORA NACION - AN"] },
+      { organization: "ACCIÓN POPULAR", percentage: 2.3, rank: 6 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -104,11 +112,11 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-19",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "40" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 26.7, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "ACCIÓN POPULAR", percentage: 14.7 },
-      { organization: "SOMOS PERÚ", percentage: 12.3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 7.3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.7, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
+      { organization: "RENOVACIÓN POPULAR", percentage: 26.7, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "ACCIÓN POPULAR", percentage: 14.7, rank: 2 },
+      { organization: "SOMOS PERÚ", percentage: 12.3, rank: 3, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 7.3, rank: 4, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.7, rank: 5, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -118,10 +126,20 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-18",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "24" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 17.3, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "SOMOS PERÚ", percentage: 14.7, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 11.7, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
+      { organization: "RENOVACIÓN POPULAR", percentage: 17.3, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 14.7,
+        rank: 2,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
+        specialCase: {
+          type: "renuncia_cabeza_lista",
+          candidateName: "César Usquiano / Jesús Maldonado",
+          description: "Renuncia del candidato titular a favor de la estructura electoral encabezada por el alcalde en funciones Jesús Maldonado.",
+        },
+      },
+      { organization: "AVANZA PAÍS", percentage: 11.7, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.4, rank: 4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -131,11 +149,11 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     measuredAt: "2026-08-23",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "26" },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 15.3, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 10.5, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "ACCIÓN POPULAR", percentage: 8.7 },
-      { organization: "SOMOS PERÚ", percentage: 7.5, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "PODEMOS PERÚ", percentage: 3.2 },
+      { organization: "RENOVACIÓN POPULAR", percentage: 15.3, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 10.5, rank: 2, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "ACCIÓN POPULAR", percentage: 8.7, rank: 3 },
+      { organization: "SOMOS PERÚ", percentage: 7.5, rank: 4, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "PODEMOS PERÚ", percentage: 3.2, rank: 5 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
@@ -149,20 +167,32 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
       provinceCode: "01",
     },
     entries: [
-      { organization: "RENOVACIÓN POPULAR", percentage: 21, aliases: ["RENOVACION POPULAR PERU"] },
-      { organization: "SOMOS PERÚ", percentage: 13, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
-      { organization: "AVANZA PAÍS", percentage: 9, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
-      { organization: "PODEMOS PERÚ", percentage: 7 },
-      { organization: "FUERZA POPULAR", percentage: 6 },
-      { organization: "AHORA NACIÓN", percentage: 6, aliases: ["AHORA NACION - AN"] },
-      { organization: "OBRAS", percentage: 5, aliases: ["PARTIDO CIVICO OBRAS"] },
-      { organization: "ACCIÓN POPULAR", percentage: 2 },
-      { organization: "JUNTOS POR EL PERÚ", percentage: 2 },
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 21,
+        rank: 1,
+        aliases: ["RENOVACION POPULAR PERU"],
+        specialCase: {
+          type: "renuncia_cabeza_lista",
+          candidateName: "Luis Rubio / Rafael López Aliaga",
+          description: "Renuncia del candidato titular a la alcaldía para posibilitar la asunción del primer regidor.",
+        },
+      },
+      { organization: "SOMOS PERÚ", percentage: 13, rank: 2, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 9, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PODEMOS PERÚ", percentage: 7, rank: 4 },
+      { organization: "FUERZA POPULAR", percentage: 6, rank: 5 },
+      { organization: "AHORA NACIÓN", percentage: 6, rank: 5, aliases: ["AHORA NACION - AN"] },
+      { organization: "OBRAS", percentage: 5, rank: 7, aliases: ["PARTIDO CIVICO OBRAS"] },
+      { organization: "ACCIÓN POPULAR", percentage: 2, rank: 8 },
+      { organization: "JUNTOS POR EL PERÚ", percentage: 2, rank: 8 },
     ],
     analysisHref:
       "https://www.ipsos.com/es-pe/encuesta-de-intencion-de-voto-para-alcalde-de-lima-agosto-2026",
     methodologyHref:
       "https://www.ipsos.com/sites/default/files/ct/news/documents/2026-08/Encuesta%20Elecciones%20Municipales%20Agosto%20de%202026%20V3.pdf",
+    specialCaseNote:
+      "Medición sobre escenario electoral con movimientos y renuncias estratégicas en la conformación de listas municipales.",
   },
 ];
 
