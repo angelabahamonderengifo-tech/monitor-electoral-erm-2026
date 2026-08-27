@@ -1823,9 +1823,7 @@ export default function Home() {
                           setPerson(candidate);
                         }}
                       >
-                        <div className="principal-rank">
-                          {voteIntentionByList.get(candidate.electoralList.idExpediente)?.rank ?? index + 1}
-                        </div>
+                        <div className="principal-rank">{index + 1}</div>
                         <div className="principal-avatar">
                           <OfficialImage src={candidatePhotoUrl(candidate)} alt={`Foto oficial de ${fmt(candidate.strCandidato)}`} fallback={(candidate.strCandidato || "?").split(" ").slice(0,2).map((part:string)=>part[0]).join("")} />
                         </div>
