@@ -824,6 +824,20 @@ export default function Home() {
     );
     setPrincipalsLoading(false);
   }
+  useEffect(() => {
+    // En provincias con muchas listas (como Lima), consultar cada candidatura
+    // al mismo tiempo puede saturar la fuente oficial y dejar sin respuesta la
+    // vista principal. Esta información solo es necesaria al abrir esa pestaña.
+    if (listView !== "principals" || !lists.length) {
+      if (!lists.length) {
+        principalRequestRef.current += 1;
+        setPrincipalCandidates([]);
+        setPrincipalsLoading(false);
+      }
+      return;
+    }
+    loadPrincipalCandidates(lists);
+  }, [listView, lists, level]);
   async function search() {
     if (!canSearch) return;
     setLoading(true);
@@ -839,7 +853,6 @@ export default function Home() {
         "/api/jne?action=lists&type=" + level + "&ubi=" + ubi,
       );
       setLists(currentLists);
-      loadPrincipalCandidates(currentLists);
     } catch (e: any) {
       setError(e.message);
       setLists([]);

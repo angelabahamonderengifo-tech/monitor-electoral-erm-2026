@@ -127,17 +127,7 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "24" },
     entries: [
       { organization: "RENOVACIÓN POPULAR", percentage: 17.3, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
-      {
-        organization: "SOMOS PERÚ",
-        percentage: 14.7,
-        rank: 2,
-        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
-        specialCase: {
-          type: "renuncia_cabeza_lista",
-          candidateName: "César Usquiano / Jesús Maldonado",
-          description: "Renuncia del candidato titular a favor de la estructura electoral encabezada por el alcalde en funciones Jesús Maldonado.",
-        },
-      },
+      { organization: "SOMOS PERÚ", percentage: 14.7, rank: 2, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
       { organization: "AVANZA PAÍS", percentage: 11.7, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "PARTIDO POPULAR CRISTIANO", percentage: 3.4, rank: 4, aliases: ["PARTIDO POPULAR CRISTIANO - PPC"] },
     ],
@@ -157,6 +147,169 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
     methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
+  },
+  {
+    pollster: "IMASOLU",
+    measuredAt: "2026-08-14",
+    territory: {
+      level: "6",
+      departmentCode: "14",
+      provinceCode: "01",
+      districtCode: "37",
+    },
+    entries: [
+      // La encuesta midió a Jesús Maldonado. Se vincula a Somos Perú, la
+      // organización de la fórmula en la que figura como primer regidor.
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 33.43,
+        rank: 1,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
+        specialCase: {
+          type: "renuncia_cabeza_lista",
+          candidateName: "César Usquiano / Jesús Maldonado",
+          description: "La medición evaluó a Jesús Maldonado. Figura como primer regidor de la lista distrital tras la dimisión de la cabeza de lista formal.",
+        },
+      },
+      {
+        organization: "PODEMOS PERÚ",
+        percentage: 10.86,
+        rank: 2,
+        aliases: ["PODEMOS PERU"],
+      },
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 7.14,
+        rank: 3,
+        aliases: ["RENOVACION POPULAR PERU"],
+      },
+      { organization: "ALIANZA PARA EL PROGRESO", percentage: 6, rank: 4 },
+      {
+        organization: "AVANZA PAÍS",
+        percentage: 0.57,
+        rank: 5,
+        aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"],
+      },
+    ],
+    analysisHref:
+      "https://imasolu.com/portfolio/evaluacion-electoral-en-lima-metropolitana-julio-2026-candidatos-distritales-comienzan-a-definir-el-mapa-municipal-de-lima-metropolitana/",
+    methodologyHref:
+      "https://imasolu.com/wp-content/uploads/2026/08/VM-EVALUACION-ELECTORAL-DE-LIMA-Y-CALLAO-Agosto-2026-2.pdf",
+    specialCaseNote:
+      "Medición distrital con candidatura de autoridad en funciones evaluada en la intención de voto.",
+  },
+  {
+    pollster: "IMASOLU",
+    measuredAt: "2026-08-14",
+    territory: {
+      level: "5",
+      departmentCode: "14",
+      provinceCode: "01",
+    },
+    entries: [
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 17.33,
+        rank: 1,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
+      },
+      { organization: "FUERZA POPULAR", percentage: 12.83, rank: 2 },
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 12.67,
+        rank: 3,
+        aliases: ["RENOVACION POPULAR PERU"],
+        specialCase: {
+          type: "renuncia_cabeza_lista",
+          candidateName: "Luis Rubio / Rafael López Aliaga",
+          description: "Renuncia del candidato titular a la alcaldía para posibilitar la asunción del primer regidor.",
+        },
+      },
+      {
+        organization: "AVANZA PAÍS",
+        percentage: 11.17,
+        rank: 4,
+        aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"],
+      },
+      {
+        organization: "OBRAS",
+        percentage: 8.83,
+        rank: 5,
+        aliases: ["PARTIDO CIVICO OBRAS"],
+      },
+      {
+        organization: "PODEMOS PERÚ",
+        percentage: 7.83,
+        rank: 6,
+        aliases: ["PODEMOS PERU"],
+      },
+      { organization: "ACCIÓN POPULAR", percentage: 5.17, rank: 7 },
+    ],
+    analysisHref:
+      "https://imasolu.com/portfolio/evaluacion-electoral-en-lima-metropolitana-julio-2026-candidatos-distritales-comienzan-a-definir-el-mapa-municipal-de-lima-metropolitana/",
+    methodologyHref:
+      "https://imasolu.com/wp-content/uploads/2026/08/VM-EVALUACION-ELECTORAL-DE-LIMA-Y-CALLAO-Agosto-2026-2.pdf",
+  },
+  {
+    pollster: "IMASOLU",
+    measuredAt: "2026-08-14",
+    territory: { level: "4", departmentCode: "24" },
+    entries: [
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 41.33,
+        rank: 1,
+        aliases: ["RENOVACION POPULAR PERU"],
+      },
+      { organization: "FUERZA POPULAR", percentage: 14.33, rank: 2 },
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 6.67,
+        rank: 3,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
+      },
+      { organization: "ACCIÓN POPULAR", percentage: 5.33, rank: 4 },
+      {
+        organization: "PARTIDO POPULAR CRISTIANO",
+        percentage: 1.83,
+        rank: 5,
+        aliases: ["PARTIDO POPULAR CRISTIANO - PPC"],
+      },
+    ],
+    analysisHref:
+      "https://imasolu.com/portfolio/evaluacion-electoral-en-lima-metropolitana-julio-2026-candidatos-distritales-comienzan-a-definir-el-mapa-municipal-de-lima-metropolitana/",
+    methodologyHref:
+      "https://imasolu.com/wp-content/uploads/2026/08/VM-EVALUACION-ELECTORAL-DE-LIMA-Y-CALLAO-Agosto-2026-2.pdf",
+  },
+  {
+    pollster: "IMASOLU",
+    measuredAt: "2026-08-14",
+    territory: { level: "5", departmentCode: "24", provinceCode: "01" },
+    entries: [
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 36.33,
+        rank: 1,
+        aliases: ["RENOVACION POPULAR PERU"],
+      },
+      { organization: "FUERZA POPULAR", percentage: 15.33, rank: 2 },
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 6.33,
+        rank: 3,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"],
+      },
+      {
+        organization: "PARTIDO POPULAR CRISTIANO",
+        percentage: 1.83,
+        rank: 4,
+        aliases: ["PARTIDO POPULAR CRISTIANO - PPC"],
+      },
+    ],
+    analysisHref:
+      "https://imasolu.com/portfolio/evaluacion-electoral-en-lima-metropolitana-julio-2026-candidatos-distritales-comienzan-a-definir-el-mapa-municipal-de-lima-metropolitana/",
+    methodologyHref:
+      "https://imasolu.com/wp-content/uploads/2026/08/VM-EVALUACION-ELECTORAL-DE-LIMA-Y-CALLAO-Agosto-2026-2.pdf",
   },
   {
     pollster: "Ipsos",
