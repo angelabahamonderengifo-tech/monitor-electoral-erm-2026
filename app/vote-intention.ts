@@ -146,7 +146,70 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
       { organization: "PODEMOS PERÚ", percentage: 3.2, rank: 5 },
     ],
     analysisHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
-    methodologyHref: "https://rpp.pe/politica/elecciones/elecciones-municipales-lima-2026-encuesta-cpi-de-intencion-de-voto-por-distritos-noticia-1703692",
+  },
+  {
+    pollster: "Sensor S.R.L.",
+    measuredAt: "2026-07-27",
+    territory: {
+      level: "6",
+      departmentCode: "14",
+      provinceCode: "01",
+      districtCode: "33",
+    },
+    entries: [
+      {
+        organization: "ACCIÓN POPULAR",
+        percentage: 16.3,
+        rank: 1,
+        aliases: ["ACCION POPULAR"],
+        specialCase: {
+          type: "empate_tecnico",
+          candidateName: "Jorge Quintana",
+          description:
+            "Empate técnico con el segundo lugar al registrar una diferencia (5.0%) menor al margen de error muestral (±5.7%).",
+        },
+      },
+      {
+        organization: "RENOVACIÓN POPULAR",
+        percentage: 11.3,
+        rank: 2,
+        aliases: ["RENOVACION POPULAR PERU", "RENOVACION POPULAR"],
+        specialCase: {
+          type: "empate_tecnico",
+          candidateName: "Daniel Li",
+          description:
+            "Empate técnico con el primer lugar al registrar una diferencia (5.0%) menor al margen de error muestral (±5.7%).",
+        },
+      },
+      {
+        organization: "AVANZA PAÍS",
+        percentage: 9,
+        rank: 3,
+        aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL", "AVANZA PAIS"],
+      },
+      {
+        organization: "SOMOS PERÚ",
+        percentage: 7.3,
+        rank: 4,
+        aliases: ["PARTIDO DEMOCRATICO SOMOS PERU", "SOMOS PERU"],
+      },
+      {
+        organization: "ALIANZA PARA EL PROGRESO",
+        percentage: 2.7,
+        rank: 5,
+        aliases: ["ALIANZA PARA EL PROGRESO - APP", "ALIANZA PARA EL PROGRESO"],
+      },
+      {
+        organization: "PODEMOS PERÚ",
+        percentage: 2.3,
+        rank: 6,
+        aliases: ["PODEMOS PERU"],
+      },
+    ],
+    analysisHref: "https://sensor.pe",
+    methodologyHref: "https://sensor.pe",
+    specialCaseNote:
+      "Escenario de empate técnico entre el primer y segundo lugar dentro del margen de error muestral (±5.7% · Registro 00502-REE/JNE).",
   },
   {
     pollster: "IMASOLU",
