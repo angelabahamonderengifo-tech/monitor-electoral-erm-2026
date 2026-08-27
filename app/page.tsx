@@ -1274,19 +1274,30 @@ export default function Home() {
     },
     [lists, query, status, voteIntentionByList, voteIntentionMeasurement],
   );
-  const filteredPrincipals = useMemo(
-    () =>
-      principalCandidates.filter(
-        (candidate) =>
-          (status === "TODOS" ||
-            candidate.electoralList.strEstadoLista === status) &&
-          (!query ||
-            `${candidate.strCandidato} ${candidate.electoralList.strOrganizacionPolitica}`
-              .toLowerCase()
-              .includes(query.toLowerCase())),
-      ),
-    [principalCandidates, status, query],
-  );
+  const filteredPrincipals = useMemo(() => {
+    const matchingPrincipals = principalCandidates.filter(
+      (candidate) =>
+        (status === "TODOS" ||
+          candidate.electoralList.strEstadoLista === status) &&
+        (!query ||
+          `${candidate.strCandidato} ${candidate.electoralList.strOrganizacionPolitica}`
+            .toLowerCase()
+            .includes(query.toLowerCase())),
+    );
+    if (!voteIntentionMeasurement) return matchingPrincipals;
+    return [...matchingPrincipals].sort((a, b) => {
+      const aMeasurement = voteIntentionByList.get(
+        a.electoralList.idExpediente,
+      );
+      const bMeasurement = voteIntentionByList.get(
+        b.electoralList.idExpediente,
+      );
+      if (!aMeasurement && !bMeasurement) return 0;
+      if (!aMeasurement) return 1;
+      if (!bMeasurement) return -1;
+      return bMeasurement.percentage - aMeasurement.percentage;
+    });
+  }, [principalCandidates, status, query, voteIntentionByList, voteIntentionMeasurement]);
   const orgs = new Set(lists.map((x) => x.strOrganizacionPolitica)).size,
     cands = lists.reduce(
       (n, x) => n + (x.intCandHombres || 0) + (x.intCandMujeres || 0),
@@ -1668,7 +1679,7 @@ export default function Home() {
                   ))}
                 </select>
               </div>
-              {listView === "lists" && lists.length > 0 && (
+              {lists.length > 0 && (
                 <div className="vote-intention-summary">
                   {voteIntentionMeasurement ? (
                     <>
@@ -1796,37 +1807,62 @@ export default function Home() {
                   <p>Prueba con otro estado o término de búsqueda.</p>
                 </div>
               ) : (
-                <div className="principal-candidates">
-                  {filteredPrincipals.map((candidate, index) => (
-                    <button
-                      key={(candidate.strDocumentoIdentidad || "") + index}
-                      className={
-                        open?.idExpediente ===
-                        candidate.electoralList.idExpediente
-                          ? "active"
-                          : ""
-                      }
-                      onClick={async () => {
-                        await showList(candidate.electoralList);
-                        setPerson(candidate);
-                      }}
-                    >
-                      <div className="principal-rank">{index + 1}</div>
-                      <div className="principal-avatar">
-                        <OfficialImage src={candidatePhotoUrl(candidate)} alt={`Foto oficial de ${fmt(candidate.strCandidato)}`} fallback={(candidate.strCandidato || "?").split(" ").slice(0,2).map((part:string)=>part[0]).join("")} />
-                      </div>
-                      <div>
-                        <small>{fmt(principalRole)}</small>
-                        <strong>{fmt(candidate.strCandidato)}</strong>
-                        <p>{candidate.electoralList.strOrganizacionPolitica}</p>
-                        <span title={`${stateHelp(candidate.strEstadoExp)} Estado de lista: ${stateHelp(candidate.electoralList.strEstadoLista)}`}>
-                          {candidate.strEstadoExp || "Estado no informado"} · {candidate.electoralList.strEstadoLista}
-                        </span>
-                      </div>
-                      <b>›</b>
-                    </button>
-                  ))}
-                </div>
+                <>
+                  <div className={"principal-candidates" + (voteIntentionMeasurement ? " has-vote-intention" : "")}>
+                    {filteredPrincipals.map((candidate, index) => (
+                      <button
+                        key={(candidate.strDocumentoIdentidad || "") + index}
+                        className={
+                          open?.idExpediente ===
+                          candidate.electoralList.idExpediente
+                            ? "active"
+                            : ""
+                        }
+                        onClick={async () => {
+                          await showList(candidate.electoralList);
+                          setPerson(candidate);
+                        }}
+                      >
+                        <div className="principal-rank">
+                          {voteIntentionByList.get(candidate.electoralList.idExpediente)?.rank ?? index + 1}
+                        </div>
+                        <div className="principal-avatar">
+                          <OfficialImage src={candidatePhotoUrl(candidate)} alt={`Foto oficial de ${fmt(candidate.strCandidato)}`} fallback={(candidate.strCandidato || "?").split(" ").slice(0,2).map((part:string)=>part[0]).join("")} />
+                        </div>
+                        <div>
+                          <small>{fmt(principalRole)}</small>
+                          <strong>{fmt(candidate.strCandidato)}</strong>
+                          <p>{candidate.electoralList.strOrganizacionPolitica}</p>
+                          <span title={`${stateHelp(candidate.strEstadoExp)} Estado de lista: ${stateHelp(candidate.electoralList.strEstadoLista)}`}>
+                            {candidate.strEstadoExp || "Estado no informado"} · {candidate.electoralList.strEstadoLista}
+                          </span>
+                        </div>
+                        {voteIntentionMeasurement && voteIntentionByList.get(candidate.electoralList.idExpediente) && (
+                          <span
+                            className="vote-intention-value"
+                            aria-label={`Puesto ${voteIntentionByList.get(candidate.electoralList.idExpediente)!.rank}, ${voteIntentionByList.get(candidate.electoralList.idExpediente)!.percentage}% de intención de voto`}
+                            title={voteIntentionByList.get(candidate.electoralList.idExpediente)!.specialCase ? `[Caso especial - ${voteIntentionByList.get(candidate.electoralList.idExpediente)!.specialCase!.type.replace(/_/g, " ")}]: ${voteIntentionByList.get(candidate.electoralList.idExpediente)!.specialCase!.description} (${voteIntentionByList.get(candidate.electoralList.idExpediente)!.specialCase!.candidateName})` : undefined}
+                          >
+                            <small>{voteIntentionByList.get(candidate.electoralList.idExpediente)!.rank}</small>
+                            <strong>{voteIntentionByList.get(candidate.electoralList.idExpediente)!.percentage.toFixed(1)}%</strong>
+                            {voteIntentionByList.get(candidate.electoralList.idExpediente)!.specialCase && (
+                              <span style={{ marginLeft: "2px", color: "#d97706", fontSize: "9px" }} aria-label="Caso especial">⚠️</span>
+                            )}
+                          </span>
+                        )}
+                        <b>›</b>
+                      </button>
+                    ))}
+                  </div>
+                  {voteIntentionMeasurement && (
+                    <footer className="vote-intention-disclaimer">
+                      <span>Los valores corresponden al estudio técnico publicado por la firma encuestadora. El Monitor no altera las cifras de intención de voto.</span>
+                      {voteIntentionMeasurement.methodologyHref && (
+                        <a href={voteIntentionMeasurement.methodologyHref}>Ver aviso metodológico ↗</a>
+                      )}
+                    </footer>
+                  )}
+                </>
               )}
             </section>
             <aside className="people-card">
