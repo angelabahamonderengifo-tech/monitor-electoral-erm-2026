@@ -26,7 +26,7 @@ export type VoteIntentionMeasurement = {
   specialCaseNote?: string;
 };
 
-const normalize = (value: string) =>
+export const normalize = (value: string) =>
   value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -347,10 +347,10 @@ export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
       { organization: "AVANZA PAÍS", percentage: 9, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
       { organization: "PODEMOS PERÚ", percentage: 7, rank: 4 },
       { organization: "FUERZA POPULAR", percentage: 6, rank: 5 },
-      { organization: "AHORA NACIÓN", percentage: 6, rank: 5, aliases: ["AHORA NACION - AN"] },
+      { organization: "AHORA NACIÓN", percentage: 6, rank: 6, aliases: ["AHORA NACION - AN"] },
       { organization: "OBRAS", percentage: 5, rank: 7, aliases: ["PARTIDO CIVICO OBRAS"] },
       { organization: "ACCIÓN POPULAR", percentage: 2, rank: 8 },
-      { organization: "JUNTOS POR EL PERÚ", percentage: 2, rank: 8 },
+      { organization: "JUNTOS POR EL PERÚ", percentage: 2, rank: 9 },
     ],
     analysisHref:
       "https://www.ipsos.com/es-pe/encuesta-de-intencion-de-voto-para-alcalde-de-lima-agosto-2026",
@@ -453,8 +453,9 @@ const pollsterTier = (pollster: string) =>
 
 export function findVoteIntentionMeasurement(
   territory: VoteIntentionMeasurement["territory"],
+  measurements: VoteIntentionMeasurement[] = voteIntentionMeasurements,
 ) {
-  return voteIntentionMeasurements
+  return measurements
     .filter(
       (measurement) =>
         measurement.territory.level === territory.level &&
