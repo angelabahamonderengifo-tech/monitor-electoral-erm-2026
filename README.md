@@ -94,8 +94,10 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 - `npm run dev`: start the Vite/Vinext development server
 - `npm run build`: build and validate the deployable Sites artifact
 - `npm run start`: start the built Vinext application
-- `npm test`: build, validate, and verify the rendered development-preview metadata
+- `npm test`: build, validate, verify the rendered development-preview metadata, and run the vote-intention unit tests
+- `npm run test:unit`: run only the vote-intention unit tests (no build required)
 - `npm run validate:artifact`: recheck an existing artifact's manifest and ESM `default.fetch` export
+- `npm run validate:vote-intention`: cross-check every `app/vote-intention.ts` entry's organization/aliases against the live JNE list for its territory (network-dependent; run after adding or editing a poll measurement)
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
 Use build and validation commands for targeted diagnosis after a remote failure, not as part of the normal checkpoint path.
