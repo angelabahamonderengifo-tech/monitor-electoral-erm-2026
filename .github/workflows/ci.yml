@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-lint:
+    name: Build, test and lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.13.0"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and verify artifact
+        run: npm run build
+
+      - name: Run tests
+        run: node --test tests/rendered-html.test.mjs && npm run test:unit
+
+      # Pre-existing lint debt (mostly `no-explicit-any` around untyped JNE API
+      # responses, plus a repeated setState-in-effect pattern) keeps this red;
+      # non-blocking until that's addressed separately so it stays visible
+      # without hiding real build/test regressions.
+      - name: Lint (non-blocking)
+        run: npm run lint
+        continue-on-error: true

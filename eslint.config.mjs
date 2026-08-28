@@ -12,6 +12,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // This project's own build/runtime output (see .gitignore):
+    "dist/**",
+    ".wrangler/**",
+    ".vinext/**",
+    ".sites-runtime/**",
+    // Static assets, including vendored/minified third-party files:
+    "public/**",
   ]),
 ]);
 
