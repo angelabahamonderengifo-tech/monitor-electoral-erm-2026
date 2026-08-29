@@ -1584,9 +1584,48 @@ export default function Home() {
                         <p>{signal.summary}</p>
                         {signal.highlights?.length ? (
                           <ul className="signal-highlights" aria-label="Cifras reportadas por la fuente">
-                            {signal.highlights.map((highlight) => (
-                              <li key={highlight}>{highlight}</li>
-                            ))}
+                            {signal.highlights.map((highlight) => {
+                              const match = highlight.match(/^([^·\-]+)(·|-)/);
+                              if (match) {
+                                const namePart = match[1].trim();
+                                const query = namePart.toLowerCase().split(/\s+/).filter(Boolean);
+                                const allCandidates = lists.flatMap((l) =>
+                                  l.candidatos.map((c) => ({
+                                    ...c,
+                                    strOrganizacionPolitica: l.strOrganizacionPolitica,
+                                    idExpediente: l.idExpediente,
+                                  }))
+                                );
+                                const candidate = allCandidates.find((c) => {
+                                  if (!c.strCandidato) return false;
+                                  const cName = c.strCandidato.toLowerCase();
+                                  return query.length > 0 && query.every((q) => cName.includes(q));
+                                });
+                                if (candidate) {
+                                  return (
+                                    <li key={highlight}>
+                                      <button
+                                        onClick={() => setPerson(candidate)}
+                                        style={{
+                                          cursor: "pointer",
+                                          background: "none",
+                                          border: "none",
+                                          color: "#1764ce",
+                                          padding: 0,
+                                          font: "inherit",
+                                        }}
+                                        title="Ver perfil del candidato"
+                                      >
+                                        {namePart}
+                                      </button>
+                                      {" "}
+                                      {highlight.substring(match[1].length)}
+                                    </li>
+                                  );
+                                }
+                              }
+                              return <li key={highlight}>{highlight}</li>;
+                            })}
                           </ul>
                         ) : null}
                         <p className="signal-disclaimer">⚠ {signal.disclaimer}</p>
