@@ -22,6 +22,17 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Sondeo de Sensor S.R.L. (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de San Miguel.",
+    highlights: ["Carolina Manucci · 17.0 %", "Marcos Cabrera · 16.3 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-08-16",
+    sourceName: "Sensor S.R.L.",
+    sourceHref: "https://sensor.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "27" },
+  },
+  {
     title: "Sondeo de IDICE del Perú (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Lince.",
     highlights: ["Luis Ernesto Flores · 26.0 %", "Jose Antonio Aliaga Pajares · 15.0 %", "Mirtha Uribe · 13.0 %"],
