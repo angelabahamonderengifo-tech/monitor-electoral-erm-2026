@@ -41,6 +41,25 @@ export const territorialSignals: TerritorialSignal[] = [
     territory: { level: "4", departmentCode: "04" },
   },
   {
+    title: "Sondeo local difundido por Diario Viral",
+    summary:
+      "Referencia publicada sobre la carrera por la Alcaldía Provincial de Arequipa.",
+    highlights: [
+      "Manuel Vera · 11.8 %",
+      "Renzo Salas · 10.6 %",
+      "Ricardo Ramírez · 8.3 %",
+      "Sin decisión · 51.6 %",
+    ],
+    disclaimer:
+      "Información orientativa: la ficha técnica completa no está accesible en una fuente pública verificable. No es una medición oficial.",
+    occurredAt: "2026-07-23",
+    sourceName: "Diario Viral",
+    sourceHref:
+      "https://diarioviral.pe/cercado/as-van-las-preferencias-para-elecciones-de-octubre-58639",
+    verification: "orientativa",
+    territory: { level: "5", departmentCode: "04", provinceCode: "01" },
+  },
+  {
     title: "Sondeo referencial de Radio Yaraví",
     summary:
       "Sondeo referencial publicado para la elección del Gobierno Regional de Arequipa.",
