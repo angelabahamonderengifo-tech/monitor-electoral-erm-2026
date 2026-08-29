@@ -1716,8 +1716,8 @@ export default function Home() {
             </section>
             <section className="milestones-section">
               <header>
-                <div><small>ANTECEDENTES DE GESTIÓN</small><h3>Hitos de gestión pública</h3></div>
-                <span>Fuentes oficiales del Estado</span>
+                <div><small>ANTECEDENTES DE GESTIÓN</small><h3>Hitos de gestión documentados</h3></div>
+                <span>Fuentes oficiales y periodísticas</span>
               </header>
               {managementMilestones.length ? (
                 <div className="milestone-list">
@@ -1728,13 +1728,13 @@ export default function Home() {
                       <p>{milestone.description}</p>
                       <div><strong>{milestone.status}</strong><span>{milestone.document}</span></div>
                     </div>
-                    <a href={milestone.source} target="_blank" rel="noreferrer"><b>Ver fuente oficial</b><span>{milestone.institution} ↗</span></a>
+                    <a href={milestone.source} target="_blank" rel="noreferrer"><b>Ver fuente</b><span>{milestone.institution} ↗</span></a>
                   </article>)}
                 </div>
               ) : (
                 <div className="milestones-empty"><b>○</b><div><strong>Sin hitos incorporados</strong><p>No se han incorporado hitos de gestión respaldados por una resolución o documento oficial para esta persona. Esto no acredita su inexistencia.</p></div></div>
               )}
-              <p className="milestones-method">Se distinguen decisiones firmes, informes de control, investigaciones y denuncias. Una investigación o denuncia no se presenta como responsabilidad acreditada.</p>
+              <p className="milestones-method">Los hitos reúnen fuentes oficiales y periodísticas identificadas. Las acciones comunicadas por una entidad se presentan como tales; no equivalen por sí solas a una evaluación independiente.</p>
             </section>
             <div className="candidate-method-note"><b>i</b><p>La información corresponde a la declaración jurada presentada por el candidato ante el JNE. “No registra” significa que el rubro no contiene registros en la fuente consultada; no constituye una verificación independiente.</p></div>
             <div className="source-note">

@@ -424,6 +424,38 @@ export const unavailablePlanStates = new Set([
   "TACHADO",
 ]);
 export const officialManagementMilestones: Record<string, any[]> = {
+  "ELMER CACERES LLICA": [
+    {
+      date: "17/12/2021",
+      type: "Ejecución y obras pendientes",
+      office: "Gobernador Regional de Arequipa (2019–2021)",
+      description: "Una cobertura de la audiencia de rendición de cuentas reportó 55 % de ejecución del presupuesto de obras 2021, junto con proyectos y hospitales con retrasos. Es un balance periodístico basado en información expuesta durante la audiencia; no es una resolución de responsabilidad.",
+      status: "Balance periodístico de rendición de cuentas",
+      document: "Audiencia de rendición de cuentas 2021",
+      source: "https://encuentro.pe/actualidad/audiencia-de-rendicion-de-cuentas-evidencio-serias-deficiencias-en-la-gestion-de-elmer-caceres/",
+      institution: "Encuentro · Universidad Católica San Pablo",
+    },
+    {
+      date: "20/01/2021",
+      type: "Respuesta COVID-19",
+      office: "Gobernador Regional de Arequipa (2019–2021)",
+      description: "En una sesión de fiscalización del Congreso, la gestión informó más de 105 contrataciones directas para el Hospital Honorio Delgado, incluyendo equipos de protección, respiradores, oxígeno y equipamiento médico. Es información expuesta por la gestión ante el grupo de trabajo.",
+      status: "Información expuesta ante comisión de fiscalización",
+      document: "Sesión del Grupo de Trabajo de Fiscalización de Contrataciones en Arequipa",
+      source: "https://comunicaciones.congreso.gob.pe/noticias/gobernador-de-arequipa-se-presento-ante-grupo-que-fiscaliza-contrataciones-en-esa-region/",
+      institution: "Congreso de la República",
+    },
+    {
+      date: "14/05/2020",
+      type: "Majes Siguas II",
+      office: "Gobernador Regional de Arequipa (2019–2021)",
+      description: "El Gobierno Regional informó el inicio de 10 km de vías perimetrales de la fase II, subcomponente A-1, por administración directa. La nota precisa que la Adenda 13 seguía en trámite: es un componente del proyecto, no una reactivación integral.",
+      status: "Acción comunicada por el Gobierno Regional",
+      document: "Nota de prensa · Resolución de Gerencia Ejecutiva N.° 052-2020-GRA/PEMS-GE-OAJ",
+      source: "https://www.gob.pe/institucion/regionarequipa/noticias/154709-gobierno-regional-de-arequipa-inicio-construccion-de-vias-perimetrales-del-proyecto-majes-siguas-ll-como-parte-de-la-reactivacion-economica",
+      institution: "Gobierno Regional de Arequipa · gob.pe",
+    },
+  ],
   "JORGE VICENTE MARTIN MUNOZ WELLS": [
     {
       date: "25/04/2022",
