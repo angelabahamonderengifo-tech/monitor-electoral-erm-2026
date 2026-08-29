@@ -897,9 +897,15 @@ export default function Home() {
     { icon: "✓", title: "Elecciones anteriores", items: previousElections, titleKeys:["strProcesoElectoral"], detailKeys:["strDetalleEleccion"], declaredElectionScope:officialElectionHistory.length===0, officialElectionScope:officialElectionHistory.length>0, jurisdictionKeys:["strJurisdiccionDeclarada"] },
     { icon: "◎", title: "Organizaciones políticas anteriores", items: previousOrganizations, titleKeys:["strOrganizacionPolitica"], detailKeys:["strVinculoPolitico"] },
   ] : [];
-  const managementMilestones = person
-    ? officialManagementMilestones[norm(person.strCandidato)] ?? []
-    : [];
+  const managementMilestones = person ? (() => {
+    const candidateKey = norm(person.strCandidato);
+    const exactMatch = officialManagementMilestones[candidateKey];
+    if (exactMatch) return exactMatch;
+    const normalizedTokens = candidateKey.split(" ").filter(Boolean).sort().join(" ");
+    return Object.entries(officialManagementMilestones).find(([name]) =>
+      norm(name).split(" ").filter(Boolean).sort().join(" ") === normalizedTokens,
+    )?.[1] ?? [];
+  })() : [];
   const territoryMatches = territoryQuery.trim().length < 2 ? [] : territoryIndex
     .filter((item) => norm(item.hierarchy).includes(norm(territoryQuery)))
     .sort((a, b) => a.level.localeCompare(b.level) || a.hierarchy.localeCompare(b.hierarchy, "es"))
