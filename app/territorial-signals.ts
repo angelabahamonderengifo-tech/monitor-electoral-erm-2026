@@ -3,6 +3,8 @@ import type { ElectoralLevel } from "./vote-intention";
 export type TerritorialSignal = {
   title: string;
   summary: string;
+  highlights?: string[];
+  disclaimer: string;
   occurredAt: string;
   sourceName: string;
   sourceHref: string;
@@ -22,7 +24,15 @@ export const territorialSignals: TerritorialSignal[] = [
   {
     title: "Sondeo local difundido por Diario Viral",
     summary:
-      "La publicación reporta como primeros a Elmer Cáceres (13.9 %), Alfredo Zegarra (11.6 %), Berly Gonzáles (11.1 %) y Jenry Huisa (10.2 %). Se conserva solo como referencia: la ficha técnica completa no está accesible en una fuente pública verificable.",
+      "Referencia publicada sobre la carrera por el Gobierno Regional de Arequipa.",
+    highlights: [
+      "Elmer Cáceres · 13.9 %",
+      "Alfredo Zegarra · 11.6 %",
+      "Berly Gonzáles · 11.1 %",
+      "Jenry Huisa · 10.2 %",
+    ],
+    disclaimer:
+      "Información orientativa: la ficha técnica completa no está accesible en una fuente pública verificable. No es una medición oficial.",
     occurredAt: "2026-07-23",
     sourceName: "Diario Viral",
     sourceHref:
@@ -33,7 +43,14 @@ export const territorialSignals: TerritorialSignal[] = [
   {
     title: "Sondeo referencial de Radio Yaraví",
     summary:
-      "El medio reporta 5.51 % para Elmer Cáceres, 4.63 % para Alfredo Zegarra y 68.28 % de personas sin decisión. Radio Yaraví declara que la medición es referencial y sin sustento científico; no es una encuesta electoral verificable.",
+      "Sondeo referencial publicado para la elección del Gobierno Regional de Arequipa.",
+    highlights: [
+      "Elmer Cáceres · 5.51 %",
+      "Alfredo Zegarra · 4.63 %",
+      "Sin decisión · 68.28 %",
+    ],
+    disclaimer:
+      "Radio Yaraví declara que el sondeo es referencial y sin sustento científico. No es una encuesta electoral oficial ni verificable.",
     occurredAt: "2026-08-24",
     sourceName: "Radio Yaraví",
     sourceHref:

@@ -1576,6 +1576,14 @@ export default function Home() {
                         <small>{new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${signal.occurredAt}T12:00:00`))}</small>
                         <h3>{signal.title}</h3>
                         <p>{signal.summary}</p>
+                        {signal.highlights?.length ? (
+                          <ul className="signal-highlights" aria-label="Cifras reportadas por la fuente">
+                            {signal.highlights.map((highlight) => (
+                              <li key={highlight}>{highlight}</li>
+                            ))}
+                          </ul>
+                        ) : null}
+                        <p className="signal-disclaimer">⚠ {signal.disclaimer}</p>
                         <a href={signal.sourceHref} target="_blank" rel="noreferrer">Fuente: {signal.sourceName} ↗</a>
                       </div>
                       <span className={"signal-status " + signal.verification}>
