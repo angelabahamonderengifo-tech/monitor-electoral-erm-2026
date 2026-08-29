@@ -39,6 +39,51 @@ export const normalize = (value: string) =>
 export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
     pollster: "CPI",
+    measuredAt: "2026-08-25",
+    territory: { level: "5", departmentCode: "14", provinceCode: "01" },
+    entries: [
+      { organization: "RENOVACIÓN POPULAR", percentage: 30.6, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "SOMOS PERÚ", percentage: 12.4, rank: 2, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 10.0, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PODEMOS PERÚ", percentage: 8.0, rank: 4 },
+      { organization: "PARTIDO CIVICO OBRAS", percentage: 6.7, rank: 5, aliases: ["OBRAS"] },
+      { organization: "FUERZA POPULAR", percentage: 5.9, rank: 6 },
+    ],
+    analysisHref: "https://www.infobae.com/peru/",
+    methodologyHref: "https://www.infobae.com/peru/",
+  },
+  {
+    pollster: "Ipsos",
+    measuredAt: "2026-08-20",
+    territory: { level: "5", departmentCode: "14", provinceCode: "01" },
+    entries: [
+      { organization: "RENOVACIÓN POPULAR", percentage: 21, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "SOMOS PERÚ", percentage: 13, rank: 2, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 9, rank: 3, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PODEMOS PERÚ", percentage: 7, rank: 4 },
+      { organization: "FUERZA POPULAR", percentage: 6, rank: 5 },
+      { organization: "PRIMERO LA GENTE", percentage: 6, rank: 6, aliases: ["PARTIDO POLITICO PRIMERO LA GENTE"] },
+      { organization: "PARTIDO CIVICO OBRAS", percentage: 5, rank: 7, aliases: ["OBRAS"] },
+    ],
+    analysisHref: "https://peru21.pe/",
+    methodologyHref: "https://peru21.pe/",
+  },
+  {
+    pollster: "Datum",
+    measuredAt: "2026-08-15",
+    territory: { level: "5", departmentCode: "14", provinceCode: "01" },
+    entries: [
+      { organization: "RENOVACIÓN POPULAR", percentage: 16, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "SOMOS PERÚ", percentage: 13, rank: 2, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "PODEMOS PERÚ", percentage: 9.5, rank: 3 },
+      { organization: "AVANZA PAÍS", percentage: 9.3, rank: 4, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PARTIDO CIVICO OBRAS", percentage: 8.3, rank: 5, aliases: ["OBRAS"] },
+    ],
+    analysisHref: "https://elcomercio.pe/",
+    methodologyHref: "https://elcomercio.pe/",
+  },
+  {
+    pollster: "CPI",
     measuredAt: "2026-08-21",
     territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "15" },
     entries: [
