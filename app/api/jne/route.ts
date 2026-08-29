@@ -276,12 +276,16 @@ export async function GET(req:NextRequest){
   }catch{return NextResponse.json({error:"No se pudo consultar la Hoja de Vida del JNE"},{status:502})}
  }
  if(action==="candidate-search"){
-  const term=String(q.get("q")??"").trim().slice(0,80);
-  if(term.length<3)return NextResponse.json({data:[]});
-  try{
+ const term=String(q.get("q")??"").trim().slice(0,80);
+ if(term.length<3)return NextResponse.json({data:[]});
+ try{
+   // El buscador del JNE no concilia de forma consistente los nombres con
+   // tildes. La interfaz conserva la escritura publicada, pero la consulta
+   // se normaliza para encontrar la candidatura oficial correspondiente.
+   const searchTerm=term.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().replace(/\s+/g,",");
    const response=await fetch(`${BASE}/PresentacionEstadistica/GetAvanzadaCanditados`,{
     method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
-    body:JSON.stringify({idProcesoElectoral:126,idEstadosCanPer:0,strDatosPersonales:term.toUpperCase().replace(/\s+/g,","),idTipoEleccion:0,strDocumentoIdentidad:"",strUbigeo:null,idOrganizacionPolitica:0,idEducacion:0,cargoEleccions:[],bTieneSentenciasPenales:"0",bTieneSentenciasCiviles:"0"}),
+    body:JSON.stringify({idProcesoElectoral:126,idEstadosCanPer:0,strDatosPersonales:searchTerm,idTipoEleccion:0,strDocumentoIdentidad:"",strUbigeo:null,idOrganizacionPolitica:0,idEducacion:0,cargoEleccions:[],bTieneSentenciasPenales:"0",bTieneSentenciasCiviles:"0"}),
     next:{revalidate:900}
    });
    if(!response.ok)throw new Error("JNE "+response.status);
