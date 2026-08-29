@@ -38,6 +38,30 @@ export const normalize = (value: string) =>
 // correspondencia exacta con la circunscripción electoral.
 export const voteIntentionMeasurements: VoteIntentionMeasurement[] = [
   {
+    pollster: "CIT",
+    measuredAt: "2026-08-04",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "06" },
+    entries: [
+      { organization: "RENOVACIÓN POPULAR", percentage: 14.3, rank: 1, aliases: ["RENOVACION POPULAR PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 14.0, rank: 2, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "PODEMOS PERÚ", percentage: 11.3, rank: 3 },
+    ],
+    analysisHref: "https://www.youtube.com/",
+    methodologyHref: "https://www.youtube.com/",
+  },
+  {
+    pollster: "CIT",
+    measuredAt: "2026-08-04",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "32" },
+    entries: [
+      { organization: "SOMOS PERÚ", percentage: 33.3, rank: 1, aliases: ["PARTIDO DEMOCRATICO SOMOS PERU"] },
+      { organization: "AVANZA PAÍS", percentage: 6.7, rank: 2, aliases: ["AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"] },
+      { organization: "ACCIÓN POPULAR", percentage: 6.0, rank: 3 },
+    ],
+    analysisHref: "https://www.youtube.com/",
+    methodologyHref: "https://www.youtube.com/",
+  },
+  {
     pollster: "CPI",
     measuredAt: "2026-08-25",
     territory: { level: "5", departmentCode: "14", provinceCode: "01" },
