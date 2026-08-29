@@ -112,7 +112,7 @@ export default function ParticipationPage() {
         coverage: totalJurisdictions ? covered / totalJurisdictions * 100 : 0,
         nationalShare: filteredLists.length ? entry.lists.length / filteredLists.length * 100 : 0,
       };
-    }).filter((entry) => !search || entry.name.toLowerCase().includes(search.toLowerCase()))
+    }).filter((entry) => !search || norm(entry.name).includes(norm(search)))
       .sort((a, b) => {
         const left = sort === "name" ? a.name : Number(a[sort] || 0);
         const right = sort === "name" ? b.name : Number(b[sort] || 0);

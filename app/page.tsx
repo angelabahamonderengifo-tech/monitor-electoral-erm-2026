@@ -849,9 +849,8 @@ export default function Home() {
         (l) =>
           (status === "TODOS" || l.strEstadoLista === status) &&
           (!query ||
-            (l.strOrganizacionPolitica + " " + l.strCodExpediente)
-              .toLowerCase()
-              .includes(query.toLowerCase())),
+            norm(l.strOrganizacionPolitica + " " + l.strCodExpediente)
+              .includes(norm(query))),
       );
       if (!voteIntentionMeasurement) return matchingLists;
       return [...matchingLists].sort((a, b) => {
@@ -871,9 +870,8 @@ export default function Home() {
         (status === "TODOS" ||
           candidate.electoralList.strEstadoLista === status) &&
         (!query ||
-          `${candidate.strCandidato} ${candidate.electoralList.strOrganizacionPolitica}`
-            .toLowerCase()
-            .includes(query.toLowerCase())),
+          norm(`${candidate.strCandidato} ${candidate.electoralList.strOrganizacionPolitica}`)
+            .includes(norm(query))),
     );
     if (!voteIntentionMeasurement) return matchingPrincipals;
     return [...matchingPrincipals].sort((a, b) => {
