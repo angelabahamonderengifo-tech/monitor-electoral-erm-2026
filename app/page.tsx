@@ -1289,7 +1289,7 @@ export default function Home() {
                   {voteIntentionMeasurement ? (
                     <>
                       <span>
-                        Ordenado por intención de voto según {voteIntentionMeasurement.pollster} · Última medición: {new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${voteIntentionMeasurement.measuredAt}T12:00:00`))} ⓘ
+                        Ordenado por intención de voto según la última encuesta oficial ({voteIntentionMeasurement.pollster} - {new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${voteIntentionMeasurement.measuredAt}T12:00:00`))}) ⓘ
                         {voteIntentionMeasurement.specialCaseNote && (
                           <span style={{ display: "block", marginTop: "3px", color: "#854d0e", fontWeight: 500 }}>
                             ⚠️ {voteIntentionMeasurement.specialCaseNote}
