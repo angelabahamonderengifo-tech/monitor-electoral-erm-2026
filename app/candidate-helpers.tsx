@@ -423,8 +423,34 @@ export const unavailablePlanStates = new Set([
   "RENUNCIA",
   "TACHADO",
 ]);
+/**
+ * Criterio editorial para exautoridades: registrar únicamente hitos con fecha y
+ * fuente identificada sobre el mandato, su inicio o cierre, sucesión institucional,
+ * decisiones electorales firmes, ejecución de gestión o controles públicos. Las
+ * investigaciones se describen por su estado procesal, sin atribuir responsabilidad.
+ */
 export const officialManagementMilestones: Record<string, any[]> = {
   "ELMER CACERES LLICA": [
+    {
+      date: "14/12/2021",
+      type: "Suspensión y sucesión institucional",
+      office: "Gobernador Regional de Arequipa (2019–2021)",
+      description: "El JNE suspendió a Elmer Cáceres Llica por mandato firme de detención derivado de un proceso penal y dejó sin efecto provisionalmente su credencial. Convocó a Kimmerlee Gutiérrez para asumir como gobernadora regional mientras se resolvía su situación jurídica; no fue una vacancia ni una destitución definitiva.",
+      status: "Suspensión del cargo y reemplazo provisional",
+      document: "Resolución N.° 0944-2021-JNE",
+      source: "https://busquedas.elperuano.pe/dispositivo/NL/2023635-1",
+      institution: "JNE · Diario Oficial El Peruano",
+    },
+    {
+      date: "07/12/2021",
+      type: "Sucesión por fallecimiento",
+      office: "Gobernador Regional de Arequipa (2019–2021)",
+      description: "Walter Edgar Gutiérrez Cueva, vicegobernador elegido con Cáceres Llica y gobernador encargado desde octubre de 2021, falleció el 22 de noviembre. Tras la vacancia de su cargo por fallecimiento, el JNE convocó a Kimmerlee Gutiérrez como vicegobernadora para completar el período.",
+      status: "Vacancia del vicegobernador por fallecimiento",
+      document: "Resolución N.° 0937-2021-JNE",
+      source: "https://andina.pe/agencia/noticia-jne-acredita-a-kimmerlee-gutierrez-como-vicegobernadora-arequipa-873011.aspx",
+      institution: "JNE · Agencia Andina",
+    },
     {
       date: "17/12/2021",
       type: "Ejecución y obras pendientes",

@@ -1738,7 +1738,7 @@ export default function Home() {
                   </article>)}
                 </div>
               ) : (
-                <div className="milestones-empty"><b>○</b><div><strong>Sin hitos incorporados</strong><p>No se han incorporado hitos de gestión respaldados por una resolución o documento oficial para esta persona. Esto no acredita su inexistencia.</p></div></div>
+                <div className="milestones-empty"><b>○</b><div><strong>Sin hitos incorporados</strong><p>No se han incorporado hitos de gestión con una fuente oficial o periodística identificada para esta persona. Esto no acredita su inexistencia.</p></div></div>
               )}
               <p className="milestones-method">Los hitos reúnen fuentes oficiales y periodísticas identificadas. Las acciones comunicadas por una entidad se presentan como tales; no equivalen por sí solas a una evaluación independiente.</p>
             </section>
