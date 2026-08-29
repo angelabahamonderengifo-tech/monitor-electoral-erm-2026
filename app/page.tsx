@@ -901,9 +901,19 @@ export default function Home() {
     const candidateKey = norm(person.strCandidato);
     const exactMatch = officialManagementMilestones[candidateKey];
     if (exactMatch) return exactMatch;
-    const normalizedTokens = candidateKey.split(" ").filter(Boolean).sort().join(" ");
+    // Solo se toleran reordenamientos específicos del nombre (p. ej. "Apellidos,
+    // Nombres" vs "Nombres Apellidos"), no cualquier permutación de palabras: una
+    // bolsa de palabras sin orden podía atribuir el historial de un funcionario a
+    // otro candidato distinto que comparte las mismas palabras en su nombre.
+    const candidateTokens = candidateKey.split(" ").filter(Boolean);
+    if (candidateTokens.length < 2) return [];
+    const allowedReorderings = new Set([
+      [...candidateTokens].reverse().join(" "),
+      [...candidateTokens.slice(1), candidateTokens[0]].join(" "),
+      [candidateTokens[candidateTokens.length - 1], ...candidateTokens.slice(0, -1)].join(" "),
+    ]);
     return Object.entries(officialManagementMilestones).find(([name]) =>
-      norm(name).split(" ").filter(Boolean).sort().join(" ") === normalizedTokens,
+      allowedReorderings.has(norm(name).split(" ").filter(Boolean).join(" ")),
     )?.[1] ?? [];
   })() : [];
   const territoryMatches = territoryQuery.trim().length < 2 ? [] : territoryIndex
@@ -964,7 +974,7 @@ export default function Home() {
             {candidateSearchLoading&&!candidateSuggestions.length?<p>Consultando nombres en el JNE…</p>:candidateSuggestions.length?candidateSuggestions.map((candidate,index)=><button key={`${candidate.idCandidato}-${index}`} onMouseDown={(event)=>event.preventDefault()} onClick={()=>goToCandidateList(candidate)}>
               <div className="search-candidate-photo"><OfficialImage src={candidatePhotoUrl(candidate)} alt={`Foto oficial de ${fmt(candidate.strCandidato)}`} fallback={(candidate.strCandidato || "?").split(" ").slice(0,2).map((part:string)=>part[0]).join("")}/></div>
               <div className="search-candidate-copy"><b>{fmt(candidate.strCandidato)}</b>
-              <span>{candidate.strCargoEleccion} · {candidate.electoralList.strOrganizacionPolitica} · {[candidate.strdepartamento,candidate.strprovincia,candidate.strdistrito].filter(Boolean).join(" / ")}</span></div>
+              <span>{candidate.strCargoEleccion} · {candidate.electoralList?.strOrganizacionPolitica} · {[candidate.strdepartamento,candidate.strprovincia,candidate.strdistrito].filter(Boolean).join(" / ")}</span></div>
               <em>Ver lista ›</em>
             </button>):<p>No se encontraron candidatos con ese nombre en las listas nacionales ERM 2026.</p>}
             <footer>La búsqueda consulta candidaturas de todo el país, sin depender del territorio seleccionado.</footer>
@@ -1650,7 +1660,7 @@ export default function Home() {
             </button>
             <div className="profilehead">
               <div className="profileavatar">
-                <OfficialImage src={candidatePhotoUrl(person)} alt={`Foto oficial de ${fmt(person.strCandidato)}`} fallback={person.strCandidato.split(" ").slice(0,2).map((part:string)=>part[0]).join("")} />
+                <OfficialImage src={candidatePhotoUrl(person)} alt={`Foto oficial de ${fmt(person.strCandidato)}`} fallback={(person.strCandidato || "?").split(" ").slice(0,2).map((part:string)=>part[0]).join("")} />
               </div>
               <div>
                 <small>FICHA INDIVIDUAL DEL CANDIDATO</small>

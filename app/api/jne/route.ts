@@ -13,8 +13,13 @@ const HISTORICAL_PROCESSES=[
 ];
 const normalizedName=(value:string)=>value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim().toUpperCase();
 const normalizedDate=(value:string)=>{
- const parts=String(value||"").split(/[\sT]/)[0].split("/").map(Number);
- return parts.length===3?`${parts[0]}-${parts[1]}-${parts[2]}`:"";
+ const base=String(value||"").split(/[\sT]/)[0];
+ const pad=(n:number)=>String(n).padStart(2,"0");
+ const iso=base.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+ if(iso)return `${iso[1]}-${pad(Number(iso[2]))}-${pad(Number(iso[3]))}`;
+ const slash=base.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ if(slash)return `${slash[3]}-${pad(Number(slash[2]))}-${pad(Number(slash[1]))}`;
+ return "";
 };
 const normalizedText=(value:string)=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim().toUpperCase();
 const safeExpediente=(value:string|null)=>/^[A-Z]{2,5}\.[0-9]{6,16}$/i.test(value||"")?(value as string):"";
@@ -124,11 +129,16 @@ export async function GET(req:NextRequest){
    const resolution=candidatePronouncement??null;
    const resolutionMotive=resolution&&["strSumilla","strDescripcion","strFundamento","strObservacion","strMotivo","strDecision","strDetalle","strFallo","strParteResolutiva"]
     .map((key)=>candidatePronouncement[key]).find((value)=>String(value||"").trim().length>=12);
-   const ordinaryState=normalizedText(state).includes("INSCRIT")||normalizedText(state).includes("ADMIT");
+   const main=(payload.lResultados??[]).find((item:any)=>String(item.strCodExpedienteExt)===expediente)??payload.lResultados?.[0]??null;
+   const estadoExpediente=evidence?.strEstado||main?.strEstadoExped||null;
+   // El estado que decide si se oculta el motivo debe venir del expediente ya
+   // consultado, no del parámetro `state` (declarado por el cliente), para que
+   // no pueda forzarse la ocultación pasando un estado falso en la URL.
+   const ordinaryStateSource=estadoExpediente??state;
+   const ordinaryState=normalizedText(ordinaryStateSource).includes("INSCRIT")||normalizedText(ordinaryStateSource).includes("ADMIT");
    const motive=ordinaryState?null:briefOfficialText(party?.strObservaciones||evidence?.strDescripcion||resolutionMotive);
    const projectId=String(resolution?.idProyecto||"").trim();
    const resolutionUrl=/^[0-9]+$/.test(projectId)?`${BASE}/assets/Proyectos/${projectId}.pdf`:null;
-   const main=(payload.lResultados??[]).find((item:any)=>String(item.strCodExpedienteExt)===expediente)??payload.lResultados?.[0]??null;
    return NextResponse.json({data:{
     estadoCandidatura:state,
     motivoEspecifico:motive,
@@ -137,7 +147,7 @@ export async function GET(req:NextRequest){
     fechaResolucion:resolution?.strFechaPronunciamiento||null,
     resolutionUrl,
     organoElectoral:evidence?.strJuradoCompetencia||main?.strJuradoCompetencia||null,
-    estadoExpediente:evidence?.strEstado||main?.strEstadoExped||null,
+    estadoExpediente,
     materiaRelacionada:evidence?.strMateria||null,
     fuente:"JNE · Plataforma Electoral",
     fuenteDisponible:true,
