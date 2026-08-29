@@ -23,6 +23,28 @@ export type TerritorialSignal = {
 export const territorialSignals: TerritorialSignal[] = [
   {
     title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Lince.",
+    highlights: ["Luis Ernesto Flores · 26.0 %", "Jose Antonio Aliaga Pajares · 15.0 %", "Mirtha Uribe · 13.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-07-20",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "11" },
+  },
+  {
+    title: "Sondeo de CIT Opinión & Mercado (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Santa Anita.",
+    highlights: ["Leonor Chumbimune · 27.6 %", "Cajo Huaringa · 27.6 %", "José Luis Nole Palomino · 22.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-08-15",
+    sourceName: "CIT Opinión & Mercado",
+    sourceHref: "https://citopinion.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "43" },
+  },
+  {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Chorrillos.",
     highlights: ["Henry Herrera Alemán · 22.0 %", "Augusto Miyashiro Y. · 21.0 %", "Ricardo Vásquez · 20.0 %"],
     disclaimer: "Información orientativa (Nivel 2).",
