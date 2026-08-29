@@ -58,6 +58,96 @@ export const territorialSignals: TerritorialSignal[] = [
     verification: "orientativa",
     territory: { level: "4", departmentCode: "04" },
   },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores y difundido en La República para el Gobierno Regional de Tacna.",
+    highlights: [
+      "Mario Ruiz · 35.01 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores (REE 00433) difunde este estudio como sondeo. Su ficha técnica y metodología completa no son de acceso público, por lo que no es verificable ni constituye una medición oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "4", departmentCode: "22" },
+  },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores para la Alcaldía Provincial de Tacna.",
+    highlights: [
+      "Niel Zavala · 33.75 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores (REE 00433) difunde este estudio como sondeo. Su ficha técnica y metodología completa no son de acceso público, por lo que no es verificable ni constituye una medición oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "5", departmentCode: "22", provinceCode: "01" },
+  },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores para la Alcaldía Distrital de Gregorio Albarracín.",
+    highlights: [
+      "Yoni Mamani Quispe · 27.31 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores difunde este estudio como sondeo de opinión referencial y no oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "22", provinceCode: "01", districtCode: "13" },
+  },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores para la Alcaldía Distrital de Pocollay.",
+    highlights: [
+      "José Carranza Zavala · 28.19 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores difunde este estudio como sondeo de opinión referencial y no oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "22", provinceCode: "01", districtCode: "09" },
+  },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores para la Alcaldía Distrital de La Yarada Los Palos.",
+    highlights: [
+      "Wilfredo Flores Quispe · 35.01 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores difunde este estudio como sondeo de opinión referencial y no oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "22", provinceCode: "01", districtCode: "14" },
+  },
+  {
+    title: "Sondeo de opinión «Tacna Decide 2026»",
+    summary:
+      "Sondeo referencial publicado por BIGDATA Consultores para la Alcaldía Distrital de Ciudad Nueva.",
+    highlights: [
+      "Julio Cueva Quispe · 24.16 %",
+    ],
+    disclaimer:
+      "BIGDATA Consultores difunde este estudio como sondeo de opinión referencial y no oficial.",
+    occurredAt: "2026-08-24",
+    sourceName: "La República",
+    sourceHref: "https://larepublica.pe",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "22", provinceCode: "01", districtCode: "12" },
+  },
 ];
 
 export function signalsForTerritory(
