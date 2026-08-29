@@ -22,17 +22,6 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
-    title: "Sondeo de Imasolu (Nivel 2)",
-    summary: "Medición de preferencias para la Alcaldía Distrital de Villa El Salvador.",
-    highlights: ["Kevin Íñigo · 32.86 %", "Luis Mozo · 14.86 %", "Homero Díaz · 8.29 %"],
-    disclaimer: "Información orientativa (Nivel 2).",
-    occurredAt: "2025-12-15",
-    sourceName: "Imasolu",
-    sourceHref: "https://imasolu.com/",
-    verification: "orientativa",
-    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "41" },
-  },
-  {
     title: "Sondeo de IDICE del Perú (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Chorrillos.",
     highlights: ["Henry Herrera Alemán · 22.0 %", "Augusto Miyashiro Y. · 21.0 %", "Ricardo Vásquez · 20.0 %"],
