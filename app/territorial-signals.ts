@@ -22,6 +22,17 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Sondeo de Sensor S.R.L. (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Barranco.",
+    highlights: ["Antonio Mezarina · 21.3 %", "Manuel Espinoza · 15.7 %", "José Rodríguez · 7.7 %", "Angélica Noguerol · 5.3 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-08-15",
+    sourceName: "Sensor S.R.L.",
+    sourceHref: "https://sensor.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "25" },
+  },
+  {
     title: "Sondeo de Imasolu (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Ate.",
     highlights: ["Manuel Vidal · 35.14 %", "Juan Enrique Dupuy", "Edde Cuellar"],
