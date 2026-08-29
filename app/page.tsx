@@ -80,6 +80,8 @@ export default function Home() {
     [listView, setListView] = useState<"lists" | "principals">("lists"),
     [principalCandidates, setPrincipalCandidates] = useState<any[]>([]),
     [principalsLoading, setPrincipalsLoading] = useState(false),
+    [signalCandidateLoading, setSignalCandidateLoading] = useState(""),
+    [signalCandidateError, setSignalCandidateError] = useState(""),
     [loading, setLoading] = useState(false),
     [error, setError] = useState("");
   const principalRequestRef = useRef(0);
@@ -479,6 +481,49 @@ export default function Home() {
     const selectedList=currentLists.find((list:any)=>String(list.idExpediente)===String(candidate.idExpediente))||candidate.electoralList;
     await showList(selectedList,type,location);
     setRoleFilter(candidate.strCargoEleccion||"all");
+  }
+  const signalNameTokens = (value: string) =>
+    norm(value).replace(/[^A-Z0-9]+/g, " ").split(/\s+/).filter(Boolean);
+  const isSameSignalCandidate = (candidate: any, signalName: string) => {
+    const signalTokens = signalNameTokens(signalName);
+    const candidateTokens = signalNameTokens(String(candidate?.strCandidato || ""));
+    return signalTokens.length > 0 && signalTokens.every((token) => candidateTokens.includes(token));
+  };
+  const isCandidateSignal = (label: string) => {
+    const value = norm(label);
+    return Boolean(value) && !["SIN DECISION", "NINGUNO", "BLANCO", "VICIADO", "NO PRECISA", "NO SABE"].includes(value);
+  };
+  async function openSignalCandidate(signalName: string) {
+    if (signalCandidateLoading || !isCandidateSignal(signalName)) return;
+    setSignalCandidateLoading(signalName);
+    setSignalCandidateError("");
+    const ubi = level === "4" ? dep : level === "5" ? dep + prov : dep + prov + dist;
+    try {
+      const matches = await get(`/api/jne?action=candidate-search&q=${encodeURIComponent(signalName)}`);
+      const candidate = matches.find((item: any) => {
+        const itemType = String(item.idtipoeleccion || "");
+        const itemUbigeo = String(item.strubigeopostula || "").padEnd(6, "0");
+        const itemUbi = itemType === "4" ? itemUbigeo.slice(0, 2) : itemType === "5" ? itemUbigeo.slice(0, 4) : itemUbigeo.slice(0, 6);
+        return itemType === level && itemUbi === ubi && isSameSignalCandidate(item, signalName);
+      });
+      if (!candidate?.electoralList) throw new Error("Candidatura no localizada");
+      const candidateList = candidate.electoralList as List;
+      const listCandidates = await get(
+        `/api/jne?action=candidates&type=${level}&list=${candidateList.idSolicitudLista}&exp=${candidateList.idExpediente}`,
+      );
+      const fullCandidate = listCandidates.find((item: any) =>
+        isSameSignalCandidate(item, signalName),
+      );
+      if (!fullCandidate) throw new Error("Ficha no disponible");
+      setOpen(candidateList);
+      setPeople(listCandidates);
+      setRoleFilter("all");
+      setPerson(fullCandidate);
+    } catch {
+      setSignalCandidateError(`No se encontró una ficha oficial del JNE para ${signalName} en este territorio.`);
+    } finally {
+      setSignalCandidateLoading("");
+    }
   }
   function openOfficialCv(candidate: Candidate) {
     if (!candidate.idHojaVida || !open) return;
@@ -1598,28 +1643,17 @@ export default function Home() {
                               const match = highlight.match(/^([^·\-]+)(·|-)/);
                               if (match) {
                                 const namePart = match[1].trim();
-                                const query = namePart.toLowerCase().split(/\s+/).filter(Boolean);
-                                const candidate = principalCandidates.find((c) => {
-                                  if (!c || !c.strCandidato) return false;
-                                  const cName = c.strCandidato.toLowerCase();
-                                  return query.length > 0 && query.every((q) => cName.includes(q));
-                                });
-                                if (candidate) {
+                                if (isCandidateSignal(namePart)) {
                                   return (
                                     <li key={highlight}>
                                       <button
-                                        onClick={() => setPerson(candidate)}
-                                        style={{
-                                          cursor: "pointer",
-                                          background: "none",
-                                          border: "none",
-                                          color: "#1764ce",
-                                          padding: 0,
-                                          font: "inherit",
-                                        }}
-                                        title="Ver perfil del candidato"
+                                        type="button"
+                                        className="signal-candidate-link"
+                                        onClick={() => openSignalCandidate(namePart)}
+                                        disabled={Boolean(signalCandidateLoading)}
+                                        title="Abrir ficha individual oficial del candidato"
                                       >
-                                        {namePart}
+                                        {signalCandidateLoading === namePart ? "Abriendo ficha…" : namePart}
                                       </button>
                                       {" "}
                                       {highlight.substring(match[1].length)}
@@ -1631,6 +1665,7 @@ export default function Home() {
                             })}
                           </ul>
                         ) : null}
+                        {signalCandidateError && <p className="signal-candidate-error" role="status">{signalCandidateError}</p>}
                         <p className="signal-disclaimer">⚠ {signal.disclaimer}</p>
                         <a href={signal.sourceHref} target="_blank" rel="noreferrer">Fuente: {signal.sourceName} ↗</a>
                       </div>
