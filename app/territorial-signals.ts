@@ -22,6 +22,28 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Sondeo de Imasolu (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Ate.",
+    highlights: ["Manuel Vidal · 35.14 %", "Juan Enrique Dupuy", "Edde Cuellar"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-06-15",
+    sourceName: "Imasolu",
+    sourceHref: "https://imasolu.com/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "03" },
+  },
+  {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de San Juan de Miraflores.",
+    highlights: ["Dante Mendieta · 40.0 %", "Eloy Chávez · 13.0 %", "Karina Leandro · 10.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-07-20",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "36" },
+  },
+  {
     title: "Sondeo local difundido por Diario Viral",
     summary:
       "Referencia publicada sobre la carrera por el Gobierno Regional de Arequipa.",
