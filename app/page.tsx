@@ -1589,15 +1589,8 @@ export default function Home() {
                               if (match) {
                                 const namePart = match[1].trim();
                                 const query = namePart.toLowerCase().split(/\s+/).filter(Boolean);
-                                const allCandidates = lists.flatMap((l) =>
-                                  l.candidatos.map((c) => ({
-                                    ...c,
-                                    strOrganizacionPolitica: l.strOrganizacionPolitica,
-                                    idExpediente: l.idExpediente,
-                                  }))
-                                );
-                                const candidate = allCandidates.find((c) => {
-                                  if (!c.strCandidato) return false;
+                                const candidate = principalCandidates.find((c) => {
+                                  if (!c || !c.strCandidato) return false;
                                   const cName = c.strCandidato.toLowerCase();
                                   return query.length > 0 && query.every((q) => cName.includes(q));
                                 });
