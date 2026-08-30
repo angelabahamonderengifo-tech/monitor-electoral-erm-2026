@@ -22,6 +22,28 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Carabayllo.",
+    highlights: ["Rosario Peláez · 22.0 %", "Nandy Córdova · 16.0 %", "Ladislao Espinoza · 14.0 %", "Wilmer Valverde · 13.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-08-05",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "05" },
+  },
+  {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de La Victoria.",
+    highlights: ["Alberto Moreno · 46.0 %", "Joe Zanabria · 13.0 %", "Susana Saldaña · 8.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-07-25",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "09" },
+  },
+  {
     title: "Sondeo de Sensor S.R.L. (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de San Miguel.",
     highlights: ["Carolina Manucci · 17.0 %", "Marcos Cabrera · 16.3 %"],
