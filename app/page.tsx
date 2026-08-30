@@ -894,6 +894,15 @@ export default function Home() {
     );
   const territory =
     level === "4" ? depName : level === "5" ? provName : distName;
+  const hasComplementarySignals = Boolean(
+    territory && !voteIntentionMeasurement && activeTerritorialSignals.length,
+  );
+  function scrollToComplementarySignals() {
+    document.getElementById("territorial-signals")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
   const university = cvData?.university ?? [];
   const candidateProfession = firstText(university.find((x:any)=>x.strTituloUni==="1") || university[0], ["strCarreraUni"]) || firstText(cvData?.labor?.[0], ["strOcupacionProfesion"]);
   const consolidatedLabor = consolidateLaborRecords(cvData?.labor ?? []);
@@ -1260,6 +1269,19 @@ export default function Home() {
               {error}. Intenta nuevamente en unos momentos.
             </div>
           )}
+          {hasComplementarySignals && (
+            <section className="complementary-signals-prompt" aria-label="Información complementaria disponible">
+              <div className="complementary-signals-icon" aria-hidden="true">↓</div>
+              <div>
+                <small>INFORMACIÓN COMPLEMENTARIA DISPONIBLE</small>
+                <strong>Este territorio no registra una encuesta oficial incorporada.</strong>
+                <p>Hay {activeTerritorialSignals.length === 1 ? "un reporte territorial orientativo" : `${activeTerritorialSignals.length} reportes territoriales orientativos`} con fuente y advertencia de verificación al final de esta página.</p>
+              </div>
+              <button type="button" onClick={scrollToComplementarySignals}>
+                Ver información complementaria <span aria-hidden="true">↓</span>
+              </button>
+            </section>
+          )}
           <div className="national-grid">
             <section className="lists-card">
               <div className="lists-head">
@@ -1613,7 +1635,7 @@ export default function Home() {
             </aside>
           </div>
           {territory && (
-            <section className="territorial-signals" aria-labelledby="territorial-signals-title">
+            <section id="territorial-signals" className="territorial-signals" aria-labelledby="territorial-signals-title">
               <div className="territorial-signals-head">
                 <div>
                   <p>INFORMACIÓN COMPLEMENTARIA</p>
