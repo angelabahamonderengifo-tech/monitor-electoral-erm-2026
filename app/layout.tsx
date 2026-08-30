@@ -25,6 +25,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Monitor Electoral Territorial ERM 2026",
   description: "Plataforma de monitoreo político-electoral y territorial del Perú.",
+  other: {
+    "codex-preview": "development",
+  },
   keywords: ["Elecciones 2026", "ERM 2026", "JNE", "Perú", "Monitor Electoral", "Candidatos", "Planes de Gobierno", "Voto Informado"],
   authors: [{ name: "Nextnet" }],
   creator: "Nextnet",
