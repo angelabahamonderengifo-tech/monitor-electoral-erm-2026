@@ -22,6 +22,28 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Estudio de ICOP (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Provincial del Cusco.",
+    highlights: ["William Peña · 12.6 %", "Albert Arenas · 12.5 %", "Sergio Sullca · 8.2 %", "Gabriela Paliza · 5.8 %"],
+    disclaimer: "Información orientativa (Nivel 2). Alto nivel de NS/NO (41%).",
+    occurredAt: "2026-08-15",
+    sourceName: "ICOP",
+    sourceHref: "https://www.facebook.com/",
+    verification: "orientativa",
+    territory: { level: "5", departmentCode: "07", provinceCode: "01" },
+  },
+  {
+    title: "Sondeo de Qosqo Times (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Santiago (Cusco).",
+    highlights: ["Lucho Villasante · 13.4 %", "Franklin Sotomayor · 11.4 %", "Fredy Vera · 10.5 %", "María Elena López · 3.9 %"],
+    disclaimer: "Información orientativa (Nivel 2) publicada en prensa regional.",
+    occurredAt: "2026-07-15",
+    sourceName: "Qosqo Times",
+    sourceHref: "https://qosqotimes.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "07", provinceCode: "01", districtCode: "06" },
+  },
+  {
     title: "Sondeo de IMOP (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Provincial de Trujillo.",
     highlights: ["Robert de la Cruz · 23.5 %", "Mario Reyna · 11.0 %", "Víctor León · 8.3 %"],
