@@ -102,7 +102,7 @@ export default function Home() {
     provName = provs.find((x) => x.code === prov)?.name || "",
     distName = dists.find((x) => x.code === dist)?.name || "";
   async function get(url: string) {
-    const r = await fetch(url);
+    const r = await fetch(url, { cache: "no-store" });
     const j = await r.json();
     if (!r.ok) throw new Error(j.error || "Error");
     return j.data;
@@ -458,6 +458,30 @@ export default function Home() {
       setFullPlanLoading(false);
     }
   }
+  async function refreshOpenList() {
+    if (!open) return;
+    const ubi = level === "4" ? dep : level === "5" ? dep + prov : dep + prov + dist;
+    try {
+      const latestLists = await get(`/api/jne?action=lists&type=${level}&ubi=${ubi}`);
+      setLists(latestLists);
+      const latestOpen = latestLists.find((list: List) => String(list.idExpediente) === String(open.idExpediente));
+      if (!latestOpen) return;
+      setOpen(latestOpen);
+      const candidates = await get(`/api/jne?action=candidates&type=${level}&list=${latestOpen.idSolicitudLista}&exp=${latestOpen.idExpediente}`);
+      setPeople(candidates);
+      if (person) {
+        const latestPerson = candidates.find((candidate: Candidate) => String(candidate.strDocumentoIdentidad) === String(person.strDocumentoIdentidad));
+        if (latestPerson) setPerson(latestPerson);
+      }
+    } catch {
+      // Se conserva la última respuesta oficial disponible si el JNE no responde.
+    }
+  }
+  useEffect(() => {
+    if (!open) return;
+    const timer = window.setInterval(() => { void refreshOpenList(); }, 60_000);
+    return () => window.clearInterval(timer);
+  }, [open?.idExpediente, level, dep, prov, dist, person?.strDocumentoIdentidad]);
   async function goToCandidateList(candidate:any){
     setSearchFocused(false);setCandidateSuggestions([]);setQuery("");setListView("lists");
     const type=String(candidate.idtipoeleccion),ubigeo=String(candidate.strubigeopostula??"").padEnd(6,"0");
@@ -492,6 +516,14 @@ export default function Home() {
   const isCandidateSignal = (label: string) => {
     const value = norm(label);
     return Boolean(value) && !["SIN DECISION", "NINGUNO", "BLANCO", "VICIADO", "NO PRECISA", "NO SABE"].includes(value);
+  };
+  const parseSignalHighlight = (highlight: string) => {
+    const match = highlight.match(/^([^·\-]+)(?:·|-)\s*(.*)$/);
+    const name = (match ? match[1] : highlight).trim();
+    const valueText = match ? match[2].trim() : "";
+    const pctMatch = valueText.match(/(\d+(?:[.,]\d+)?)\s*%/);
+    const pct = pctMatch ? parseFloat(pctMatch[1].replace(",", ".")) : null;
+    return { name, valueText, pct };
   };
   async function openSignalCandidate(signalName: string) {
     if (signalCandidateLoading || !isCandidateSignal(signalName)) return;
@@ -1646,58 +1678,105 @@ export default function Home() {
               </div>
               {!activeTerritorialSignals.length ? (
                 <div className="territorial-signals-empty">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4" width="15" height="13" rx="2" stroke="currentColor" strokeWidth="1.2"/><path d="M2.5 8h15" stroke="currentColor" strokeWidth="1.2"/><path d="M6 2v3.5M14 2v3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
                   <b>Aún no se registran reportes complementarios para este territorio.</b>
                   <span>Cuando existan, se mostrarán separados de las mediciones verificadas y con su fuente y condición de verificación.</span>
                 </div>
               ) : (
                 <div className="territorial-signals-list">
-                  {activeTerritorialSignals.map((signal) => (
-                    <article key={`${signal.occurredAt}-${signal.sourceHref}`}>
-                      <div>
-                        <small>{new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${signal.occurredAt}T12:00:00`))}</small>
-                        <h3>{signal.title}</h3>
-                        <p>{signal.summary}</p>
-                        {signal.highlights?.length ? (
-                          <ul className="signal-highlights" aria-label="Cifras reportadas por la fuente">
-                            {signal.highlights.map((highlight) => {
-                              const match = highlight.match(/^([^·\-]+)(·|-)/);
-                              if (match) {
-                                const namePart = match[1].trim();
-                                if (isCandidateSignal(namePart)) {
-                                  return (
-                                    <li key={highlight}>
-                                      <button
-                                        type="button"
-                                        className="signal-candidate-link"
-                                        onClick={() => openSignalCandidate(namePart)}
-                                        disabled={Boolean(signalCandidateLoading)}
-                                        title="Abrir ficha individual oficial del candidato"
-                                      >
-                                        {signalCandidateLoading === namePart ? "Abriendo ficha…" : namePart}
-                                      </button>
-                                      {" "}
-                                      {highlight.substring(match[1].length)}
-                                    </li>
-                                  );
-                                }
-                              }
-                              return <li key={highlight}>{highlight}</li>;
+                  {activeTerritorialSignals.map((signal) => {
+                    const parsedHighlights = (signal.highlights || []).map(parseSignalHighlight);
+                    const maxPct = Math.max(0, ...parsedHighlights.map((h) => h.pct ?? 0));
+                    const hasRanking = maxPct > 0;
+                    return (
+                      <article key={`${signal.occurredAt}-${signal.sourceHref}`}>
+                        <div className="signal-meta">
+                          <small>{new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${signal.occurredAt}T12:00:00`))}</small>
+                          <span className={"signal-status " + signal.verification}>
+                            {signal.verification === "verificada" ? (
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.2"/><path d="M3.6 6.2 5.2 7.8 8.4 4.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                            ) : signal.verification === "orientativa" ? (
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.2"/><path d="M6 5.2v3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><circle cx="6" cy="3.4" r=".6" fill="currentColor"/></svg>
+                            ) : (
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.2"/><path d="M4.3 6h3.4M6 4.3v3.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                            )}
+                            {signal.verification === "verificada"
+                              ? "Verificada"
+                              : signal.verification === "orientativa"
+                                ? "Orientativa · no verificable"
+                                : "En revisión"}
+                          </span>
+                        </div>
+                        <div>
+                          <h3>{signal.title}</h3>
+                          <p>{signal.summary}</p>
+                        </div>
+                        {hasRanking ? (
+                          <div className="signal-ranking" aria-label="Cifras reportadas por la fuente">
+                            {parsedHighlights.map((h, i) => {
+                              const muted = !isCandidateSignal(h.name);
+                              const fillWidth = h.pct != null ? Math.min(100, (h.pct / maxPct) * 100) : 0;
+                              return (
+                                <div className={"signal-rank-row" + (muted ? " muted" : "")} key={`${signal.occurredAt}-${h.name}-${i}`}>
+                                  {!muted ? (
+                                    <button
+                                      type="button"
+                                      className="signal-candidate-link signal-rank-name"
+                                      onClick={() => openSignalCandidate(h.name)}
+                                      disabled={Boolean(signalCandidateLoading)}
+                                      title="Abrir ficha individual oficial del candidato"
+                                    >
+                                      {signalCandidateLoading === h.name ? "Abriendo ficha…" : h.name}
+                                    </button>
+                                  ) : (
+                                    <span className="signal-rank-name">{h.name}</span>
+                                  )}
+                                  <span className="signal-rank-pct">{h.valueText || (h.pct != null ? `${h.pct} %` : "")}</span>
+                                  <div className="signal-rank-track">
+                                    {!muted && <div className="signal-rank-fill" style={{ width: `${fillWidth}%` }} />}
+                                  </div>
+                                </div>
+                              );
                             })}
+                          </div>
+                        ) : signal.highlights?.length ? (
+                          <ul className="signal-highlights" aria-label="Cifras reportadas por la fuente">
+                            {parsedHighlights.map((h, i) => (
+                              <li key={`${signal.occurredAt}-${h.name}-${i}`}>
+                                {!isCandidateSignal(h.name) ? (
+                                  h.name + (h.valueText ? ` ${h.valueText}` : "")
+                                ) : (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="signal-candidate-link"
+                                      onClick={() => openSignalCandidate(h.name)}
+                                      disabled={Boolean(signalCandidateLoading)}
+                                      title="Abrir ficha individual oficial del candidato"
+                                    >
+                                      {signalCandidateLoading === h.name ? "Abriendo ficha…" : h.name}
+                                    </button>
+                                    {h.valueText ? ` ${h.valueText}` : ""}
+                                  </>
+                                )}
+                              </li>
+                            ))}
                           </ul>
                         ) : null}
                         {signalCandidateError && <p className="signal-candidate-error" role="status">{signalCandidateError}</p>}
-                        <p className="signal-disclaimer">⚠ {signal.disclaimer}</p>
-                        <a href={signal.sourceHref} target="_blank" rel="noreferrer">Fuente: {signal.sourceName} ↗</a>
-                      </div>
-                      <span className={"signal-status " + signal.verification}>
-                        {signal.verification === "verificada"
-                          ? "Verificada"
-                          : signal.verification === "orientativa"
-                            ? "Orientativa · no verificable"
-                            : "En revisión"}
-                      </span>
-                    </article>
-                  ))}
+                        <p className="signal-disclaimer">
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 15 14H1L8 1.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/><path d="M8 6.5v3.2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><circle cx="8" cy="11.8" r=".7" fill="currentColor"/></svg>
+                          <span>{signal.disclaimer}</span>
+                        </p>
+                        <div className="signal-source">
+                          <a href={signal.sourceHref} target="_blank" rel="noreferrer" aria-label={`Fuente: ${signal.sourceName}`}>
+                            {signal.sourceName}
+                            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4h6v6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 4 4 12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+                          </a>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
               )}
             </section>
@@ -1766,6 +1845,7 @@ export default function Home() {
                   {candidateStateLoading ? <span className="candidate-state-loading">Consultando el expediente oficial…</span> : !norm(person.strEstadoExp).includes("INSCRIT") && !norm(person.strEstadoExp).includes("ADMIT") && candidateStateDetail?.motivoEspecifico ? <div className="candidate-state-motive"><small>MOTIVO</small><p>{candidateStateDetail.motivoEspecifico}</p></div> : !norm(person.strEstadoExp).includes("INSCRIT") && !norm(person.strEstadoExp).includes("ADMIT") ? <span>Motivo específico no disponible en la fuente consultada.</span> : null}
                   <footer>
                     <span><strong>Fuente:</strong> JNE</span>
+                    {candidateStateDetail?.consultedAt && <span>Consulta actual: {new Date(candidateStateDetail.consultedAt).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}</span>}
                     {candidateStateDetail?.resolucion && <span>{candidateStateDetail.resolucion}{candidateStateDetail.fechaResolucion ? ` · ${String(candidateStateDetail.fechaResolucion).slice(0,10)}` : ""}</span>}
                     <button type="button" onMouseEnter={keepCandidateStateTooltipOpen} onPointerDown={keepCandidateStateTooltipOpen} onClick={openOfficialCandidateStateSource}>Ver fuente oficial ↗</button>
                   </footer>
@@ -1819,7 +1899,7 @@ export default function Home() {
             </section>
             <section className="milestones-section">
               <header>
-                <div><small>ANTECEDENTES DE GESTIÓN</small><h3>Hitos de gestión documentados</h3></div>
+                <div><small>ANTECEDENTES DOCUMENTADOS</small><h3>Hitos de gestión y electorales</h3></div>
                 <span>Fuentes oficiales y periodísticas</span>
               </header>
               {managementMilestones.length ? (
@@ -1835,9 +1915,9 @@ export default function Home() {
                   </article>)}
                 </div>
               ) : (
-                <div className="milestones-empty"><b>○</b><div><strong>Sin hitos incorporados</strong><p>No se han incorporado hitos de gestión con una fuente oficial o periodística identificada para esta persona. Esto no acredita su inexistencia.</p></div></div>
+                <div className="milestones-empty"><b>○</b><div><strong>Sin hitos incorporados</strong><p>No se han incorporado hitos de gestión o electorales con una fuente oficial o periodística identificada para esta persona. Esto no acredita su inexistencia.</p></div></div>
               )}
-              <p className="milestones-method">Los hitos reúnen fuentes oficiales y periodísticas identificadas. Las acciones comunicadas por una entidad se presentan como tales; no equivalen por sí solas a una evaluación independiente.</p>
+              <p className="milestones-method">Los hitos reúnen fuentes oficiales y periodísticas identificadas. Los procedimientos electorales se describen según su estado procesal y las acciones comunicadas por una entidad se presentan como tales; no equivalen por sí solas a una evaluación independiente.</p>
             </section>
             <div className="candidate-method-note"><b>i</b><p>La información corresponde a la declaración jurada presentada por el candidato ante el JNE. “No registra” significa que el rubro no contiene registros en la fuente consultada; no constituye una verificación independiente.</p></div>
             <div className="source-note">
