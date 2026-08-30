@@ -23,6 +23,17 @@ export type TerritorialSignal = {
 export const territorialSignals: TerritorialSignal[] = [
   {
     title: "Sondeo de Imasolu (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Chaclacayo.",
+    highlights: ["Marco Tello Castro · 30.5 %", "Iván Altamirano", "Jaime Callañaupa"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-06-15",
+    sourceName: "Imasolu",
+    sourceHref: "https://imasolu.com/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "07" },
+  },
+  {
+    title: "Sondeo de Imasolu (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Villa El Salvador.",
     highlights: ["Kevin Íñigo · 40.29 %", "Homero Díaz · 3.14 %"],
     disclaimer: "Información orientativa (Nivel 2).",
