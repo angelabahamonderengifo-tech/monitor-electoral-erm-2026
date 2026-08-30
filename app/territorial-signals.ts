@@ -22,6 +22,17 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Estudio de Grupo Cusco (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Kosñipata (Paucartambo).",
+    highlights: ["Juan José Rodriguez · 17.78 %", "Abraham Quispe · 17.22 %", "Carlos Acuña · 15.56 %", "Elvis Holgado · 9.44 %"],
+    disclaimer: "Información orientativa (Nivel 2). Muestra escenario de empate técnico en el primer lugar.",
+    occurredAt: "2026-08-09",
+    sourceName: "Grupo Cusco Titular Provincias",
+    sourceHref: "https://www.facebook.com/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "07", provinceCode: "11", districtCode: "05" },
+  },
+  {
     title: "Estudio de ICOP (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Provincial del Cusco.",
     highlights: ["William Peña · 12.6 %", "Albert Arenas · 12.5 %", "Sergio Sullca · 8.2 %", "Gabriela Paliza · 5.8 %"],
