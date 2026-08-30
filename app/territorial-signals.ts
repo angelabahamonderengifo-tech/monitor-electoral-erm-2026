@@ -22,6 +22,28 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Breña.",
+    highlights: ["Ivan Chang · 12.0 %", "Isabel Rodriguez · 10.0 %", "Luis Ojeda · 8.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-06-20",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "04" },
+  },
+  {
+    title: "Sondeo de IDICE del Perú (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Lurín.",
+    highlights: ["Juan Raúl Marticorena · 37.0 %", "Rosa Torrejón · 14.0 %", "Bernardo Silva · 13.0 %"],
+    disclaimer: "Información orientativa (Nivel 2).",
+    occurredAt: "2026-08-10",
+    sourceName: "IDICE del Perú",
+    sourceHref: "https://idice.com.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "13" },
+  },
+  {
     title: "Sondeo de Imasolu (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Chaclacayo.",
     highlights: ["Marco Tello Castro · 30.5 %", "Iván Altamirano", "Jaime Callañaupa"],
