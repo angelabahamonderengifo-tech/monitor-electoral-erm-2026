@@ -22,6 +22,11 @@ const normalizedDate=(value:string)=>{
  return "";
 };
 const normalizedText=(value:string)=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim().toUpperCase();
+const sameCandidateName=(left:string,right:string)=>{
+ const a=normalizedText(left).split(" ").filter(Boolean).sort().join(" ");
+ const b=normalizedText(right).split(" ").filter(Boolean).sort().join(" ");
+ return Boolean(a&&b&&a===b);
+};
 const safeExpediente=(value:string|null)=>/^[A-Z]{2,5}\.[0-9]{6,16}$/i.test(value||"")?(value as string):"";
 const briefOfficialText=(value:unknown)=>{
  const clean=String(value||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
@@ -109,21 +114,23 @@ export async function GET(req:NextRequest){
   try{
    const response=await fetch(`${BASE}/Expediente/ConsultarCodigo`,{
     method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
-    body:JSON.stringify({strCodigo:expediente,idJurado:1,idProcesoElectoral:126}),next:{revalidate:21600}
+    body:JSON.stringify({strCodigo:expediente,idJurado:1,idProcesoElectoral:126}),cache:"no-store"
    });
    if(!response.ok)throw new Error("JNE "+response.status);
    const payload=(await response.json()).data??{};
    const records=[...(payload.lResultados??[]),...(payload.lAsociados1??[]),...(payload.lAsociados2??[])];
    const candidateKey=normalizedText(candidate);
-   const candidateRecords=records.filter((record:any)=>(record.lParteProcesal??[]).some((party:any)=>normalizedText(party.strNombresApellidos)===candidateKey));
+   const candidateRecords=records.filter((record:any)=>(record.lParteProcesal??[]).some((party:any)=>sameCandidateName(party.strNombresApellidos,candidateKey)));
    const evidence=candidateRecords.find((record:any)=>String(record.strDescripcion||"").trim()||
-    (record.lParteProcesal??[]).some((party:any)=>normalizedText(party.strNombresApellidos)===candidateKey&&String(party.strObservaciones||"").trim()));
-   const party=evidence?.lParteProcesal?.find((item:any)=>normalizedText(item.strNombresApellidos)===candidateKey);
+    (record.lParteProcesal??[]).some((party:any)=>sameCandidateName(party.strNombresApellidos,candidateKey)&&String(party.strObservaciones||"").trim()));
+   const party=evidence?.lParteProcesal?.find((item:any)=>sameCandidateName(item.strNombresApellidos,candidateKey));
    const pronouncements=(payload.lPronunciamientos??[]).filter((item:any)=>item&&item.strPronunciamiento);
-   const candidatePronouncement=pronouncements.find((item:any)=>normalizedText([
+   const candidatePronouncement=pronouncements.filter((item:any)=>normalizedText([
     item.strProyecto,item.strParteResolutiva,item.strSumilla,item.strDescripcion,item.strFundamento,
     item.strObservacion,item.strMotivo,item.strDecision,item.strDetalle,
-   ].filter(Boolean).join(" ")).includes(candidateKey));
+   ].filter(Boolean).join(" ")).includes(candidateKey)).sort((a:any,b:any)=>
+    new Date(String(b.strFechaPronunciamiento||b.strFecha||0)).getTime()-new Date(String(a.strFechaPronunciamiento||a.strFecha||0)).getTime(),
+   )[0];
    // Un expediente de lista puede contener resoluciones de varios candidatos. No se
    // atribuye una resolución si el documento no identifica al candidato consultado.
    const resolution=candidatePronouncement??null;
@@ -149,10 +156,11 @@ export async function GET(req:NextRequest){
     organoElectoral:evidence?.strJuradoCompetencia||main?.strJuradoCompetencia||null,
     estadoExpediente,
     materiaRelacionada:evidence?.strMateria||null,
+    consultedAt:new Date().toISOString(),
     fuente:"JNE · Plataforma Electoral",
     fuenteDisponible:true,
-   }});
-  }catch{return NextResponse.json({data:{estadoCandidatura:state,motivoEspecifico:null,expediente,fuente:"JNE · Plataforma Electoral",fuenteDisponible:true,errorConsulta:true}})}
+   }},{headers:{"Cache-Control":"no-store, max-age=0"}});
+  }catch{return NextResponse.json({data:{estadoCandidatura:state,motivoEspecifico:null,expediente,fuente:"JNE · Plataforma Electoral",fuenteDisponible:true,errorConsulta:true,consultedAt:new Date().toISOString()}},{headers:{"Cache-Control":"no-store, max-age=0"}})}
  }
  if(action==="downloadfull"||action==="viewfull"){
   const file=String(q.get("file")??"");if(!/^[A-Za-z0-9-]+\.pdf$/i.test(file))return NextResponse.json({error:"Archivo inválido"},{status:400});
@@ -286,7 +294,7 @@ export async function GET(req:NextRequest){
    const response=await fetch(`${BASE}/PresentacionEstadistica/GetAvanzadaCanditados`,{
     method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
     body:JSON.stringify({idProcesoElectoral:126,idEstadosCanPer:0,strDatosPersonales:searchTerm,idTipoEleccion:0,strDocumentoIdentidad:"",strUbigeo:null,idOrganizacionPolitica:0,idEducacion:0,cargoEleccions:[],bTieneSentenciasPenales:"0",bTieneSentenciasCiviles:"0"}),
-    next:{revalidate:900}
+    cache:"no-store"
    });
    if(!response.ok)throw new Error("JNE "+response.status);
    const raw=((await response.json()).data??[]).slice(0,30);
@@ -299,7 +307,7 @@ export async function GET(req:NextRequest){
    const listGroups=new Map<string,any[]>();
    await Promise.all([...groups.keys()].map(async key=>{
     const [type,ubi]=key.split("-");
-    const r=await fetch(`${BASE}/Candidato/GetExpedientesLista/126-${type}-${ubi}------0-`,{headers:{Accept:"application/json"},next:{revalidate:900}});
+    const r=await fetch(`${BASE}/Candidato/GetExpedientesLista/126-${type}-${ubi}------0-`,{headers:{Accept:"application/json"},cache:"no-store"});
     listGroups.set(key,r.ok?((await r.json()).data??[]):[]);
    }));
    const data=raw.map((item:any)=>{
@@ -317,6 +325,6 @@ export async function GET(req:NextRequest){
  else if(action==="candidates"){const type=safe(q.get("type")),list=safe(q.get("list")),exp=safe(q.get("exp"));if(!["4","5","6"].includes(type)||!list||!exp)return NextResponse.json({error:"Consulta inválida"},{status:400});path="/Candidato/GetCandidatos/"+type+"-126-"+list+"-"+exp}
  else if(action==="plan"){const id=safe(q.get("id"));if(!id)return NextResponse.json({error:"Plan inválido"},{status:400});path="/Candidato/GetPlanGobiernoById/"+id}
  else return NextResponse.json({error:"Acción no admitida"},{status:400});
- try{const r=await fetch(BASE+path,{headers:{Accept:"application/json"},next:{revalidate:900}});if(!r.ok)throw new Error("JNE "+r.status);const body=await r.json();return NextResponse.json({data:body.data??[],consultedAt:new Date().toISOString(),source:BASE+path,process:{id:126,name:"ELECCIONES REGIONALES Y MUNICIPALES 2026",sigla:"ERM.2026"}})}
+ try{const r=await fetch(BASE+path,{headers:{Accept:"application/json"},cache:"no-store"});if(!r.ok)throw new Error("JNE "+r.status);const body=await r.json();return NextResponse.json({data:body.data??[],consultedAt:new Date().toISOString(),source:BASE+path,process:{id:126,name:"ELECCIONES REGIONALES Y MUNICIPALES 2026",sigla:"ERM.2026"}},{headers:{"Cache-Control":"no-store, max-age=0"}})}
  catch{return NextResponse.json({error:"El JNE no respondió temporalmente"},{status:502})}
 }

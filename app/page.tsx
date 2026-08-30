@@ -28,6 +28,7 @@ import {
   consolidateLaborRecords,
   expandAndConsolidateElectedRoles,
   jneCodeForMap,
+  candidateRelevantUpdates,
   officialManagementMilestones,
   getPlanState,
   geoPath,
@@ -981,25 +982,23 @@ export default function Home() {
     { icon: "✓", title: "Elecciones anteriores", items: previousElections, titleKeys:["strProcesoElectoral"], detailKeys:["strDetalleEleccion"], declaredElectionScope:officialElectionHistory.length===0, officialElectionScope:officialElectionHistory.length>0, jurisdictionKeys:["strJurisdiccionDeclarada"] },
     { icon: "◎", title: "Organizaciones políticas anteriores", items: previousOrganizations, titleKeys:["strOrganizacionPolitica"], detailKeys:["strVinculoPolitico"] },
   ] : [];
-  const managementMilestones = person ? (() => {
-    const candidateKey = norm(person.strCandidato);
-    const exactMatch = officialManagementMilestones[candidateKey];
-    if (exactMatch) return exactMatch;
-    // Solo se toleran reordenamientos específicos del nombre (p. ej. "Apellidos,
-    // Nombres" vs "Nombres Apellidos"), no cualquier permutación de palabras: una
-    // bolsa de palabras sin orden podía atribuir el historial de un funcionario a
-    // otro candidato distinto que comparte las mismas palabras en su nombre.
-    const candidateTokens = candidateKey.split(" ").filter(Boolean);
-    if (candidateTokens.length < 2) return [];
-    const allowedReorderings = new Set([
-      [...candidateTokens].reverse().join(" "),
-      [...candidateTokens.slice(1), candidateTokens[0]].join(" "),
-      [candidateTokens[candidateTokens.length - 1], ...candidateTokens.slice(0, -1)].join(" "),
-    ]);
-    return Object.entries(officialManagementMilestones).find(([name]) =>
-      allowedReorderings.has(norm(name).split(" ").filter(Boolean).join(" ")),
-    )?.[1] ?? [];
-  })() : [];
+  // El JNE puede devolver el mismo candidato como "Nombres Apellidos" o
+  // "Apellidos Nombres". La clave canónica conserva todos los tokens y solo
+  // cambia su orden, por lo que el contenido curado no se pierde por el formato.
+  const candidateData = person ? (() => {
+    const canonicalName = norm(person.strCandidato).split(" ").filter(Boolean).sort().join(" ");
+    if (!canonicalName) return { milestones: [], updates: [] };
+    const lookup = <T,>(records: Record<string, T>) =>
+      Object.entries(records).find(([name]) =>
+        norm(name).split(" ").filter(Boolean).sort().join(" ") === canonicalName,
+      )?.[1];
+    return {
+      milestones: lookup(officialManagementMilestones) ?? [],
+      updates: lookup(candidateRelevantUpdates) ?? [],
+    };
+  })() : { milestones: [], updates: [] };
+  const managementMilestones = candidateData.milestones;
+  const relevantCandidateUpdates = candidateData.updates;
   const territoryMatches = territoryQuery.trim().length < 2 ? [] : territoryIndex
     .filter((item) => norm(item.hierarchy).includes(norm(territoryQuery)))
     .sort((a, b) => a.level.localeCompare(b.level) || a.hierarchy.localeCompare(b.hierarchy, "es"))
@@ -1842,6 +1841,13 @@ export default function Home() {
                 {candidateStateTooltipOpen && <div className="candidate-state-tooltip" role="tooltip" onMouseEnter={keepCandidateStateTooltipOpen} onMouseLeave={scheduleCandidateStateTooltipClose}>
                   <b>{fmt(person.strEstadoExp || "Estado oficial")}</b>
                   <p>{stateHelp(person.strEstadoExp)}</p>
+                  {relevantCandidateUpdates.map((update) => (
+                    <div className="candidate-state-motive" key={update.source}>
+                      <small>{update.label.toUpperCase()} · {update.date}</small>
+                      <p>{update.summary}</p>
+                      <a href={update.source} target="_blank" rel="noreferrer">Ver reporte: {update.sourceName} ↗</a>
+                    </div>
+                  ))}
                   {candidateStateLoading ? <span className="candidate-state-loading">Consultando el expediente oficial…</span> : !norm(person.strEstadoExp).includes("INSCRIT") && !norm(person.strEstadoExp).includes("ADMIT") && candidateStateDetail?.motivoEspecifico ? <div className="candidate-state-motive"><small>MOTIVO</small><p>{candidateStateDetail.motivoEspecifico}</p></div> : !norm(person.strEstadoExp).includes("INSCRIT") && !norm(person.strEstadoExp).includes("ADMIT") ? <span>Motivo específico no disponible en la fuente consultada.</span> : null}
                   <footer>
                     <span><strong>Fuente:</strong> JNE</span>

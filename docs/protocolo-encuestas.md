@@ -75,3 +75,12 @@ export type VoteIntentionMeasurement = {
 1. **Exclusión de no-candidaturas del array `entries`:** Votos blancos, viciados, nulos, "no precisa" o "ninguno" no se incorporan a `entries` (este array vincula exclusivamente listas políticas inscritas ante el JNE).
 2. **Preservación del `rank`:** Si una opción no-electoral ocupó una posición (ej. Blanco/Viciado con 15% en puesto 2), el siguiente candidato conserva su puesto publicado (ej. `rank: 3`).
 3. **Normalización de Aliases:** Agregar siempre las variantes que utiliza el JNE en `l.strOrganizacionPolitica` (ej. `"PARTIDO DEMOCRATICO SOMOS PERU"`, `"RENOVACION POPULAR PERU"`, `"AVANZA PAIS - PARTIDO DE INTEGRACION SOCIAL"`).
+
+---
+
+## 5. Actualización de estados electorales
+
+1. **Fuente prioritaria:** El estado de una candidatura, su lista y cualquier tacha, exclusión o apelación se consulta directamente en la Plataforma Electoral del JNE. Una nota periodística puede aportar contexto, pero no sustituye el estado oficial vigente.
+2. **Último pronunciamiento aplicable:** Para una candidatura se debe identificar el pronunciamiento más reciente que la nombre en su expediente, incluyendo recursos de apelación, y no conservar como definitivo un resultado de primera instancia si existe una decisión posterior.
+3. **Consulta actualizada:** Las consultas de listas, candidaturas, búsqueda nacional y detalle de expediente se realizan sin reutilizar respuestas almacenadas. Mientras una ficha permanezca abierta, el Monitor vuelve a consultar su lista y candidaturas cada minuto.
+4. **Presentación prudente:** Cuando la resolución final aún no esté disponible en una fuente oficial enlazable, se debe indicar expresamente que el desenlace es reportado y mantener visible el vínculo al expediente o fuente disponible.

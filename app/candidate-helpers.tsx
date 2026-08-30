@@ -429,7 +429,52 @@ export const unavailablePlanStates = new Set([
  * decisiones electorales firmes, ejecución de gestión o controles públicos. Las
  * investigaciones se describen por su estado procesal, sin atribuir responsabilidad.
  */
+const joaquinRamirezMilestones = [
+  {
+    date: "05/08/2026",
+    type: "Tacha a candidatura regional · causal",
+    office: "Candidato a gobernador regional de Cajamarca · ERM 2026",
+    description:
+      "Causal invocada: la omisión en la hoja de vida de 2026 de una sentencia condenatoria firme, previamente declarada por el candidato en su postulación de 2011. La cobertura de la decisión del JEE identifica el antecedente como una condena por delito contra la fe pública. El JEE consideró que una eventual rehabilitación no eliminaba el deber de declarar la sentencia para el voto informado.",
+    status: "Tacha fundada en primera instancia · estado JNE: Tachado",
+    document: "Resolución N.° 00843-2026-JEE-CAJA/JNE · omisión de sentencia firme",
+    source:
+      "https://larepublica.pe/politica/2026/08/06/jee-de-cajamarca-excluye-a-joaquin-ramirez-como-candidato-a-gobernador-regional-por-ocultar-sentencia-hnews-127716",
+    institution: "JEE de Cajamarca · cobertura de La República",
+  },
+  {
+    date: "18/08/2026",
+    type: "Apelación electoral",
+    office: "Candidato a gobernador regional de Cajamarca · ERM 2026",
+    description:
+      "Un reporte sobre la audiencia pública del Pleno del JNE señala que se declaró fundada la apelación de la candidatura en el expediente ERM.2026033273, lo que revirtió la decisión de primera instancia. El estado vigente de la candidatura se consulta dinámicamente en la plataforma del JNE.",
+    status: "Apelación favorable reportada",
+    document: "Expediente ERM.2026033273 · resolución final por enlazar",
+    source:
+      "https://larotativa.pe/jne-da-la-razon-a-joaquin-ramirez-y-confirma-que-continua-en-carrera-por-el-gorecaj/",
+    institution: "La Rotativa · reporte de audiencia del JNE",
+  },
+];
+
+const joaquinRamirezRelevantUpdates = [
+  {
+    date: "22/08/2026",
+    label: "Noticia relevante · apelación",
+    summary:
+      "Un medio local reportó que el Pleno del JNE declaró fundada la apelación vinculada a la tacha. Este reporte no modifica el estado oficial vigente que publica el JNE, actualmente “Tachado”.",
+    source: "https://larotativa.pe/jne-da-la-razon-a-joaquin-ramirez-y-confirma-que-continua-en-carrera-por-el-gorecaj/",
+    sourceName: "La Rotativa",
+  },
+];
+
+export const candidateRelevantUpdates: Record<string, typeof joaquinRamirezRelevantUpdates> = {
+  "REBER JOAQUIN RAMIREZ GAMARRA": joaquinRamirezRelevantUpdates,
+  "RAMIREZ GAMARRA REBER JOAQUIN": joaquinRamirezRelevantUpdates,
+};
+
 export const officialManagementMilestones: Record<string, any[]> = {
+  "REBER JOAQUIN RAMIREZ GAMARRA": joaquinRamirezMilestones,
+  "RAMIREZ GAMARRA REBER JOAQUIN": joaquinRamirezMilestones,
   "ELMER CACERES LLICA": [
     {
       date: "14/12/2021",
