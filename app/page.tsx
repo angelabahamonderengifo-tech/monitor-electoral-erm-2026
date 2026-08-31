@@ -33,6 +33,7 @@ import {
   officialManagementMilestones,
   getPlanState,
   geoPath,
+  geoBounds,
 } from "./candidate-helpers";
 export default function Home() {
   const [dep, setDep] = useState(""),
@@ -1033,8 +1034,8 @@ export default function Home() {
   const radarMatches = currentRadar ? radarSourceItems.filter((item: any) => currentRadar[2].some((keyword: string) => norm([item.strPGProblema,item.strPGObjetivo,item.strPGMeta,item.strPGIndicador].join(" ")).includes(keyword))) : [];
 
   const renderFeatures = useMemo(() => {
-    if (level === "6" && prov) return geoDists.filter((f: any) => f.properties.IDPROV === prov);
-    if (level === "5" && dep) return geoProvs.filter((f: any) => f.properties.FIRST_IDPR?.startsWith(dep));
+    if (level === "6" && prov) return geoDists.filter((f: any) => jneCodeForMap(f.properties.NOMBDEP) === dep && (() => { const p = territoryIndex.find((i:any) => i.level === "PROVINCIA" && i.dep === dep && norm(i.name) === norm(f.properties.NOMBPROV)); return p ? p.prov === prov : false; })());
+    if (level === "5" && dep) return geoProvs.filter((f: any) => jneCodeForMap(f.properties.FIRST_NOMB) === dep);
     return geo;
   }, [level, dep, prov, geo, geoProvs, geoDists]);
 
@@ -1259,7 +1260,7 @@ export default function Home() {
             </div>
             <div className="geo-wrap">
               {geo.length ? (
-                <svg viewBox={viewBox} role="img" aria-label="Mapa interactivo del Per�" style={{transition:"viewBox 0.5s ease-in-out"}}>{renderFeatures.map((f: any) => { let code="", name="", isSelected=false, onClick=()=>{}; if (level==="6" && prov) { code=f.properties.IDDIST; name=f.properties.NOMBDIST; isSelected = dist===code; onClick=()=>setDist(code); } else if (level==="5" && dep) { code=f.properties.FIRST_IDPR; name=f.properties.NOMBPROV; isSelected = prov===code; onClick=()=>{setProv(code);setLevel("6");}; } else { code = jneCodeForMap(f.properties.NOMBDEP); name = f.properties.NOMBDEP; isSelected = dep===code; onClick=()=>{if(code){setDep(code);setLevel("5");}}; } return (<path key={code||name} data-name={fmt(name)} data-jne-code={code} d={geoPath(f.geometry)} className={isSelected?"selected":""} onClick={onClick}><title>{fmt(name)}</title></path>); })}</svg>
+                <svg viewBox={viewBox} role="img" aria-label="Mapa interactivo del Per�" style={{transition:"viewBox 0.5s ease-in-out"}}>{renderFeatures.map((f: any) => { let code="", name="", isSelected=false, onClick=()=>{}; if (level==="6" && prov) { const dTarget = territoryIndex.find((i:any) => i.level === "DISTRITO" && i.dep === dep && i.prov === prov && norm(i.name) === norm(f.properties.NOMBDIST)); code = dTarget ? dTarget.dist : ""; name=f.properties.NOMBDIST; isSelected = dist===code; onClick=()=>setDist(code); } else if (level==="5" && dep) { const p = territoryIndex.find((i:any) => i.level === "PROVINCIA" && i.dep === dep && norm(i.name) === norm(f.properties.NOMBPROV)); code = p ? p.prov : ""; name=f.properties.NOMBPROV; isSelected = prov===code; onClick=()=>{setProv(code);setLevel("6");}; } else { code = jneCodeForMap(f.properties.NOMBDEP); name = f.properties.NOMBDEP; isSelected = dep===code; onClick=()=>{if(code){setDep(code);setLevel("5");}}; } return (<path key={code||name} data-name={fmt(name)} data-jne-code={code} d={geoPath(f.geometry)} className={isSelected?"selected":""} onClick={onClick}><title>{fmt(name)}</title></path>); })}</svg>
               ) : (
                 <div className="map-loading">Cargando mapa…</div>
               )}
