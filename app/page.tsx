@@ -29,6 +29,7 @@ import {
   expandAndConsolidateElectedRoles,
   jneCodeForMap,
   candidateRelevantUpdates,
+  documentedElectedRolesForCandidate,
   officialManagementMilestones,
   getPlanState,
   geoPath,
@@ -942,7 +943,8 @@ export default function Home() {
   const publicLabor = consolidatedLabor.filter(isPublicEmployment);
   const professionalLabor = consolidatedLabor.filter((item:any)=>!isPublicEmployment(item));
   const officialElectionHistory = cvData?.officialElectionHistory ?? [];
-  const resolvedElectedRoles = expandAndConsolidateElectedRoles(cvData?.electedRoles ?? [],officialElectionHistory,publicLabor,cvData?.electedRoleCatalog ?? []);
+  const documentedElectedRoles = person ? documentedElectedRolesForCandidate(person.strCandidato || "") : [];
+  const resolvedElectedRoles = expandAndConsolidateElectedRoles([...(cvData?.electedRoles ?? []),...documentedElectedRoles],officialElectionHistory,publicLabor,cvData?.electedRoleCatalog ?? []);
   const previousOrganizationMap=new Map<string,{strOrganizacionPolitica:string;relations:Set<string>;strFuenteTrayectoria?:string;strEtiquetaFuenteTrayectoria?:string}>();
   const organizationKey=(value:string)=>norm(value).replace(/\bPARTIDO POLITICO\b/g,"").replace(/\bORGANIZACION POLITICA LOCAL (DISTRITAL|PROVINCIAL)\b/g,"").replace(/\s+/g," ").trim();
   const addPreviousOrganization=(name:unknown,relation:string,source?:string,label?:string)=>{

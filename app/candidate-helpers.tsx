@@ -431,29 +431,6 @@ export const unavailablePlanStates = new Set([
  */
 const joaquinRamirezMilestones = [
   {
-    date: "2011–2016",
-    type: "Cargo de elección popular",
-    office: "Congresista de la República por Cajamarca",
-    description:
-      "Ejerció representación parlamentaria por la circunscripción de Cajamarca durante el periodo 2011–2016. El acta de juramentación del Congreso consigna a Reber Joaquín Ramírez Gamarra entre los congresistas electos.",
-    status: "Cargo ejercido",
-    document: "Acta de juramentación del Congreso · periodo parlamentario 2011–2016",
-    source:
-      "https://www2.congreso.gob.pe/sicr/RedacActas/Actas.nsf/actas/05256D7B00750443052578D800548883",
-    institution: "Congreso de la República",
-  },
-  {
-    date: "2023–2026",
-    type: "Cargo de elección popular",
-    office: "Alcalde provincial de Cajamarca",
-    description:
-      "Fue proclamado alcalde provincial de Cajamarca por la organización Cajamarca Siempre Verde para el periodo municipal 2023–2026. La resolución de proclamación del JNE registra la credencial a su nombre.",
-    status: "Cargo ejercido",
-    document: "Resolución de proclamación · Elecciones Municipales 2022",
-    source: "https://plataformahistorico.jne.gob.pe/Tmp/Proyectos/630612.pdf",
-    institution: "Jurado Nacional de Elecciones",
-  },
-  {
     date: "05/08/2026",
     type: "Tacha a candidatura regional · causal",
     office: "Candidato a gobernador regional de Cajamarca · ERM 2026",
@@ -493,6 +470,46 @@ const joaquinRamirezRelevantUpdates = [
 export const candidateRelevantUpdates: Record<string, typeof joaquinRamirezRelevantUpdates> = {
   "REBER JOAQUIN RAMIREZ GAMARRA": joaquinRamirezRelevantUpdates,
   "RAMIREZ GAMARRA REBER JOAQUIN": joaquinRamirezRelevantUpdates,
+};
+
+const joaquinRamirezElectedRoles = [
+  {
+    strCargoEleccionNombre: "Congresista de la República por Cajamarca",
+    strCargoEleccion2: "Congresista de la República",
+    strOrgPolCargoElec: "Fuerza 2011",
+    strAnioCargoElecDesde: "2011",
+    strAnioCargoElecHasta: "2016",
+    strJurisdiccionDeclarada: "Cajamarca",
+    strComentario: "Representación parlamentaria por la circunscripción de Cajamarca.",
+    strFuenteTrayectoria:
+      "https://www2.congreso.gob.pe/sicr/RedacActas/Actas.nsf/actas/05256D7B00750443052578D800548883",
+    strEtiquetaFuenteTrayectoria: "Fuente oficial del Congreso",
+  },
+  {
+    strCargoEleccionNombre: "Alcalde provincial de Cajamarca",
+    strCargoEleccion2: "Alcalde provincial",
+    strOrgPolCargoElec: "Cajamarca Siempre Verde",
+    strAnioCargoElecDesde: "2023",
+    strAnioCargoElecHasta: "2026",
+    strJurisdiccionDeclarada: "Cajamarca / Cajamarca",
+    strComentario: "Proclamado para el periodo municipal 2023–2026 en las Elecciones Municipales 2022.",
+    strFuenteTrayectoria: "https://plataformahistorico.jne.gob.pe/Tmp/Proyectos/630612.pdf",
+    strEtiquetaFuenteTrayectoria: "Resolución de proclamación del JNE",
+  },
+];
+
+const documentedElectedRoles: Record<string, typeof joaquinRamirezElectedRoles> = {
+  "REBER JOAQUIN RAMIREZ GAMARRA": joaquinRamirezElectedRoles,
+};
+
+const canonicalCandidateName = (value: string) =>
+  norm(value).split(" ").filter(Boolean).sort().join(" ");
+
+export const documentedElectedRolesForCandidate = (name: string) => {
+  const key = canonicalCandidateName(name);
+  return Object.entries(documentedElectedRoles).find(([candidate]) =>
+    canonicalCandidateName(candidate) === key,
+  )?.[1] ?? [];
 };
 
 export const officialManagementMilestones: Record<string, any[]> = {
