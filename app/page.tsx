@@ -1217,17 +1217,30 @@ export default function Home() {
         </aside>
         <section className="national-content">
           <div className="crumbs">
-            Perú {depName && <><b>›</b> {depName}</>}
+            {depName ? (
+              <button type="button" onClick={() => { setDep(""); setLevel("4"); setProv(""); setDist(""); }}>Perú</button>
+            ) : (
+              <span>Perú</span>
+            )}
+            {depName && <><b>›</b> {provName ? (
+              <button type="button" onClick={() => { setLevel("4"); setProv(""); setDist(""); }}>{depName}</button>
+            ) : (
+              <span>{depName}</span>
+            )}</>}
             {provName && (
               <>
                 {" "}
-                <b>›</b> {provName}
+                <b>›</b> {distName ? (
+                  <button type="button" onClick={() => { setLevel("5"); setDist(""); }}>{provName}</button>
+                ) : (
+                  <span>{provName}</span>
+                )}
               </>
             )}
             {distName && (
               <>
                 {" "}
-                <b>›</b> {distName}
+                <b>›</b> <span>{distName}</span>
               </>
             )}
           </div>
