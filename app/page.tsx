@@ -1031,6 +1031,31 @@ export default function Home() {
   const radarSourceItems = dimensions.flatMap((dimension) => dimension.items.map((item: any) => ({ ...item, dimension: dimension.name })));
   const currentRadar = radarDimensions.find(([name]) => name === radarDimension);
   const radarMatches = currentRadar ? radarSourceItems.filter((item: any) => currentRadar[2].some((keyword: string) => norm([item.strPGProblema,item.strPGObjetivo,item.strPGMeta,item.strPGIndicador].join(" ")).includes(keyword))) : [];
+
+  const renderFeatures = useMemo(() => {
+    if (level === "6" && prov) return geoDists.filter((f: any) => f.properties.IDPROV === prov);
+    if (level === "5" && dep) return geoProvs.filter((f: any) => f.properties.FIRST_IDPR?.startsWith(dep));
+    return geo;
+  }, [level, dep, prov, geo, geoProvs, geoDists]);
+
+  useEffect(() => {
+    let targetFeature: any = null;
+    if (level === "6" && prov && geoProvs.length) {
+      targetFeature = geoProvs.find((f: any) => f.properties.FIRST_IDPR === prov);
+    } else if (level === "5" && dep && geo.length) {
+      targetFeature = geo.find((f: any) => jneCodeForMap(f.properties.NOMBDEP) === dep);
+    }
+    
+    if (targetFeature && targetFeature.geometry) {
+      const [minX, minY, maxX, maxY] = geoBounds(targetFeature.geometry);
+      const width = maxX - minX;
+      const height = maxY - minY;
+      const pad = Math.max(width, height) * 0.15;
+      setViewBox(`${minX - pad} ${minY - pad} ${width + pad * 2} ${height + pad * 2}`);
+    } else {
+      setViewBox("0 0 390 430");
+    }
+  }, [level, dep, prov, geo, geoProvs]);
   return (
     <main className="national">
       <header className="topbar">
@@ -1650,8 +1675,8 @@ export default function Home() {
               <div className="territorial-signals-head">
                 <div>
                   <p>INFORMACIÓN COMPLEMENTARIA</p>
-                  <h2 id="territorial-signals-title">Reportes territoriales orientativos</h2>
-                  <span>Reportes separados de las mediciones verificadas · No ordenan listas ni constituyen una predicción.</span>
+                  <h2 id="territorial-signals-title">Reportes territoriales</h2>
+                  <span>Mediciones y reportes complementarios · Las cifras no ordenan listas ni constituyen una predicción.</span>
                 </div>
                 <span className="territorial-signals-territory">{territory}</span>
               </div>
