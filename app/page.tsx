@@ -89,6 +89,7 @@ export default function Home() {
     [error, setError] = useState("");
   const principalRequestRef = useRef(0);
   const dashboardTargetRef = useRef<{ dep: string; level: string; prov: string; dist: string } | null>(null);
+  const suppressAutoSearchRef = useRef(false);
   const [geo, setGeo] = useState<any[]>([]);
   const [geoProvs, setGeoProvs] = useState<any[]>([]);
   const [geoDists, setGeoDists] = useState<any[]>([]);
@@ -417,12 +418,7 @@ export default function Home() {
     }
   }
   useEffect(() => {
-    const target = dashboardTargetRef.current;
-    if (!target || target.level === "4" || !canSearch) return;
-    const matches = dep === target.dep && level === target.level &&
-      (level === "4" || prov === target.prov) &&
-      (level !== "6" || dist === target.dist);
-    if (!matches) return;
+    if (!canSearch || suppressAutoSearchRef.current) return;
     dashboardTargetRef.current = null;
     search();
   }, [dep, level, prov, dist, canSearch]);
@@ -492,27 +488,32 @@ export default function Home() {
   }, [open?.idExpediente, level, dep, prov, dist, person?.strDocumentoIdentidad]);
   async function goToCandidateList(candidate:any){
     setSearchFocused(false);setCandidateSuggestions([]);setQuery("");setListView("lists");
-    const type=String(candidate.idtipoeleccion),ubigeo=String(candidate.strubigeopostula??"").padEnd(6,"0");
-    const location={dep:ubigeo.slice(0,2),prov:type==="4"?"":ubigeo.slice(2,4),dist:type==="6"?ubigeo.slice(4,6):""};
-    setDep(location.dep);setLevel(type);
-    const ubi=type==="4"?location.dep:type==="5"?location.dep+location.prov:location.dep+location.prov+location.dist;
-    const [currentLists,provinceData,districtData]=await Promise.all([
-      get(`/api/jne?action=lists&type=${type}&ubi=${ubi}`),
-      type!=="4"?get(`/api/jne?action=provinces&dep=${location.dep}`):Promise.resolve([]),
-      type==="6"?get(`/api/jne?action=districts&dep=${location.dep}&prov=${location.prov}`):Promise.resolve([]),
-    ]);
-    if(type!=="4"){
-      setProvs(provinceData.map((item:any)=>({code:item.strUbiProvincia,name:fmt(item.strProvincia)})));
-      setProv(location.prov);
+    suppressAutoSearchRef.current=true;
+    try {
+      const type=String(candidate.idtipoeleccion),ubigeo=String(candidate.strubigeopostula??"").padEnd(6,"0");
+      const location={dep:ubigeo.slice(0,2),prov:type==="4"?"":ubigeo.slice(2,4),dist:type==="6"?ubigeo.slice(4,6):""};
+      setDep(location.dep);setLevel(type);
+      const ubi=type==="4"?location.dep:type==="5"?location.dep+location.prov:location.dep+location.prov+location.dist;
+      const [currentLists,provinceData,districtData]=await Promise.all([
+        get(`/api/jne?action=lists&type=${type}&ubi=${ubi}`),
+        type!=="4"?get(`/api/jne?action=provinces&dep=${location.dep}`):Promise.resolve([]),
+        type==="6"?get(`/api/jne?action=districts&dep=${location.dep}&prov=${location.prov}`):Promise.resolve([]),
+      ]);
+      if(type!=="4"){
+        setProvs(provinceData.map((item:any)=>({code:item.strUbiProvincia,name:fmt(item.strProvincia)})));
+        setProv(location.prov);
+      }
+      if(type==="6"){
+        setDists(districtData.map((item:any)=>({code:item.strUbiDistrito,name:fmt(item.strDistrito)})));
+        setDist(location.dist);
+      }
+      setLists(currentLists);
+      const selectedList=currentLists.find((list:any)=>String(list.idExpediente)===String(candidate.idExpediente))||candidate.electoralList;
+      await showList(selectedList,type,location);
+      setRoleFilter(candidate.strCargoEleccion||"all");
+    } finally {
+      suppressAutoSearchRef.current=false;
     }
-    if(type==="6"){
-      setDists(districtData.map((item:any)=>({code:item.strUbiDistrito,name:fmt(item.strDistrito)})));
-      setDist(location.dist);
-    }
-    setLists(currentLists);
-    const selectedList=currentLists.find((list:any)=>String(list.idExpediente)===String(candidate.idExpediente))||candidate.electoralList;
-    await showList(selectedList,type,location);
-    setRoleFilter(candidate.strCargoEleccion||"all");
   }
   const signalNameTokens = (value: string) =>
     norm(value).replace(/[^A-Z0-9]+/g, " ").split(/\s+/).filter(Boolean);
@@ -1120,6 +1121,9 @@ export default function Home() {
             Departamento
             <select value={dep} onChange={(e) => {
               setDep(e.target.value);
+              setLevel("4");
+              setProv("");
+              setDist("");
               setLists([]);
               setOpen(null);
               setPeople([]);
@@ -1273,13 +1277,13 @@ export default function Home() {
                   code = p ? p.prov : "";
                   name = f.properties.NOMBPROV;
                   isSelected = prov === code;
-                  onClick = () => { if(code) { setProv(code); setLevel("5"); } };
+                  onClick = () => { if(code) { setProv(code); setDist(""); setLevel("5"); } };
                 } else {
                   code = jneCodeForMap(f.properties.NOMBDEP);
                   name = f.properties.NOMBDEP;
                   isSelected = dep === code;
-                  onClick = () => { if(code) { setDep(code); setLevel("4"); } };
-                }}; } return (<path key={code||name} data-name={fmt(name)} data-jne-code={code} d={geoPath(f.geometry)} className={isSelected?"selected":""} onClick={onClick}><title>{fmt(name)}</title></path>); })}</svg>
+                  onClick = () => { if(code) { setDep(code); setLevel("4"); setProv(""); setDist(""); } };
+                } return (<path key={code||name} data-name={fmt(name)} data-jne-code={code} d={geoPath(f.geometry)} className={isSelected?"selected":""} onClick={onClick}><title>{fmt(name)}</title></path>); })}</svg>
               ) : (
                 <div className="map-loading">Cargando mapa…</div>
               )}
