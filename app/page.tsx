@@ -1673,7 +1673,7 @@ export default function Home() {
                 <div>
                   <p>INFORMACIÓN COMPLEMENTARIA</p>
                   <h2 id="territorial-signals-title">Reportes territoriales orientativos</h2>
-                  <span>Fuentes públicas no oficiales ni verificables · No representan intención de voto, no ordenan listas y no constituyen una predicción.</span>
+                  <span>Reportes separados de las mediciones verificadas · No ordenan listas ni constituyen una predicción.</span>
                 </div>
                 <span className="territorial-signals-territory">{territory}</span>
               </div>
@@ -1701,11 +1701,11 @@ export default function Home() {
                             ) : (
                               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.2"/><path d="M4.3 6h3.4M6 4.3v3.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
                             )}
-                            {signal.verification === "verificada"
+                            {signal.verificationLabel ?? (signal.verification === "verificada"
                               ? "Verificada"
                               : signal.verification === "orientativa"
                                 ? "Orientativa · no verificable"
-                                : "En revisión"}
+                                : "En revisión")}
                           </span>
                         </div>
                         <div>

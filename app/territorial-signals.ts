@@ -10,6 +10,8 @@ export type TerritorialSignal = {
   sourceHref: string;
   /** Estas señales nunca se usan para ordenar listas ni como intención de voto. */
   verification: "verificada" | "en_revision" | "orientativa";
+  /** Etiqueta específica cuando la limitación no es la falta de ficha técnica. */
+  verificationLabel?: string;
   territory: {
     level: ElectoralLevel;
     departmentCode: string;
@@ -22,14 +24,15 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
-    title: "Estudio de Vox Populi (Nivel 2)",
-    summary: "Medición de preferencias para el Gobierno Regional de Cajamarca.",
-    highlights: ["Felícita Tocto · 16.5 %", "Joaquín Ramírez · 16.0 %", "Edison Carrasco · 10.0 %", "Moisés Gonzales · 9.0 %"],
-    disclaimer: "Información orientativa (Nivel 2). Empate técnico en el primer lugar.",
+    title: "Sondeo parcial Vox Populi · cinco provincias",
+    summary: "Preferencias para la gobernación regional medidas en Cajamarca, Jaén, Chota, San Ignacio y Santa Cruz; no cubre las 13 provincias de la región.",
+    highlights: ["Felícita Tocto · 16.5 %", "Joaquín Ramírez · 16.0 %", "Edison Carrasco · 10.0 %", "Moisés Gonzales · 9.0 %", "NS/NO · 33.5 %"],
+    disclaimer: "Estudio con ficha técnica y REE N.° 000512-JNE, pero de cobertura regional parcial. No representa al total de Cajamarca, no ordena listas regionales y la diferencia de 0.5 puntos entre los dos primeros está dentro del margen de error declarado (±2.95 %).",
     occurredAt: "2026-08-09",
-    sourceName: "Vox Populi / La República",
-    sourceHref: "https://www.voxpopuliperu.com/",
+    sourceName: "Vox Populi · ficha técnica REE",
+    sourceHref: "https://www.voxpopuliperu.com/pdf/FT-%20CAJAMARCA%20AGOSTO%202026%20VOX%20POPULI.pdf",
     verification: "orientativa",
+    verificationLabel: "Orientativa · cobertura parcial",
     territory: { level: "4", departmentCode: "06" },
   },
   {
