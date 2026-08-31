@@ -24,6 +24,17 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Estudio de CIT Opinión & Mercado (Nivel 2)",
+    summary: "Medición de preferencias para la Alcaldía Distrital de Santa Anita.",
+    highlights: ["Leonor Chumbimune · 27.6 %"],
+    disclaimer: "Información orientativa (Nivel 2). Leonor Chumbimune lidera las preferencias.",
+    occurredAt: "2026-08-17",
+    sourceName: "CIT Opinión & Mercado",
+    sourceHref: "https://citopinion.pe/",
+    verification: "orientativa",
+    territory: { level: "6", departmentCode: "14", provinceCode: "01", districtCode: "37" },
+  },
+  {
     title: "Sondeo parcial Vox Populi · cinco provincias",
     summary: "Preferencias para la gobernación regional medidas en Cajamarca, Jaén, Chota, San Ignacio y Santa Cruz; no cubre las 13 provincias de la región.",
     highlights: ["Felícita Tocto · 16.5 %", "Joaquín Ramírez · 16.0 %", "Edison Carrasco · 10.0 %", "Moisés Gonzales · 9.0 %", "NS/NO · 33.5 %"],
