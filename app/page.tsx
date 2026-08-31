@@ -1067,7 +1067,7 @@ export default function Home() {
             <img src="/nextnet-logo.png" alt="Nextnet · Conectando el futuro" />
           </div>
           <div>
-            <strong>Monitor Electoral Territorial</strong>
+            <strong>Monitor Electoral Territorial v1.1</strong>
             <small>Cobertura nacional · ERM 2026</small>
           </div>
         </div>
@@ -1152,7 +1152,7 @@ export default function Home() {
           {level !== "4" && (
             <label>
               Provincia
-              <select value={prov} onChange={(e) => {setProv(e.target.value);setDist("");}}>
+              <select value={prov} onChange={(e) => {setProv(e.target.value);setDist("");setLevel("5");}}>
                 <option value="">Seleccionar…</option>
                 {provs.map((x) => (
                   <option value={x.code} key={x.code}>
@@ -1165,7 +1165,7 @@ export default function Home() {
           {level === "6" && (
             <label>
               Distrito
-              <select value={dist} onChange={(e) => setDist(e.target.value)}>
+              <select value={dist} onChange={(e) => {setDist(e.target.value);setLevel("6");}}>
                 <option value="">Seleccionar…</option>
                 {dists.map((x) => (
                   <option value={x.code} key={x.code}>
