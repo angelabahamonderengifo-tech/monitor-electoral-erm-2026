@@ -22,6 +22,17 @@ export type TerritorialSignal = {
 // para calcular intención de voto, ordenar listas ni elaborar rankings.
 export const territorialSignals: TerritorialSignal[] = [
   {
+    title: "Estudio de CIT Opinión & Mercado (Nivel 2)",
+    summary: "Medición de preferencias para el Gobierno Regional de Loreto.",
+    highlights: ["Fernando Meléndez · 23.3 %", "Jorge Mera · 11.2 %", "Vladimir Chong · 10.5 %", "Olmex Escalante · 10.3 %"],
+    disclaimer: "Información orientativa (Nivel 2). Alto nivel de indecisión (32.5% entre Ninguno y NS/NO).",
+    occurredAt: "2026-08-07",
+    sourceName: "CIT Opinión & Mercado",
+    sourceHref: "https://citopinion.pe/",
+    verification: "orientativa",
+    territory: { level: "4", departmentCode: "16" },
+  },
+  {
     title: "Estudio de Grupo Cusco (Nivel 2)",
     summary: "Medición de preferencias para la Alcaldía Distrital de Kosñipata (Paucartambo).",
     highlights: ["Juan José Rodriguez · 17.78 %", "Abraham Quispe · 17.22 %", "Carlos Acuña · 15.56 %", "Elvis Holgado · 9.44 %"],
