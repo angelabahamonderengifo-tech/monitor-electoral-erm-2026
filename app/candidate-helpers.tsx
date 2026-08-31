@@ -605,6 +605,7 @@ export function getPlanState(l: List | null) {
 }
 export const project = ([lon, lat]: number[]) => [(lon + 82) * 28, -lat * 22];
 export function geoPath(g: any) {
+  if (!g) return "";
   const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
   return polys
     .map((poly: any) =>
@@ -621,4 +622,22 @@ export function geoPath(g: any) {
         .join(""),
     )
     .join("");
+}
+
+export function geoBounds(g: any) {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  if (!g) return [minX, minY, maxX, maxY];
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+  polys.forEach((poly: any) => {
+    poly.forEach((ring: any) => {
+      ring.forEach((p: number[]) => {
+        const [x, y] = project(p);
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      });
+    });
+  });
+  return [minX, minY, maxX, maxY];
 }
