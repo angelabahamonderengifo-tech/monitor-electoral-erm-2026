@@ -155,6 +155,8 @@ export default function Home() {
       .then((r) => r.json())
       .then((j) => setGeo(j.features || []))
       .catch(() => setGeo([]));
+    fetch("/peru-provincias.geojson").then(r=>r.json()).then(j=>setGeoProvs(j.features||[])).catch(()=>setGeoProvs([]));
+    fetch("/peru-distritos.geojson").then(r=>r.json()).then(j=>setGeoDists(j.features||[])).catch(()=>setGeoDists([]));
   }, []);
   useEffect(() => {
     const update = () => {
