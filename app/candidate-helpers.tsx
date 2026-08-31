@@ -431,6 +431,29 @@ export const unavailablePlanStates = new Set([
  */
 const joaquinRamirezMilestones = [
   {
+    date: "2011–2016",
+    type: "Cargo de elección popular",
+    office: "Congresista de la República por Cajamarca",
+    description:
+      "Ejerció representación parlamentaria por la circunscripción de Cajamarca durante el periodo 2011–2016. El acta de juramentación del Congreso consigna a Reber Joaquín Ramírez Gamarra entre los congresistas electos.",
+    status: "Cargo ejercido",
+    document: "Acta de juramentación del Congreso · periodo parlamentario 2011–2016",
+    source:
+      "https://www2.congreso.gob.pe/sicr/RedacActas/Actas.nsf/actas/05256D7B00750443052578D800548883",
+    institution: "Congreso de la República",
+  },
+  {
+    date: "2023–2026",
+    type: "Cargo de elección popular",
+    office: "Alcalde provincial de Cajamarca",
+    description:
+      "Fue proclamado alcalde provincial de Cajamarca por la organización Cajamarca Siempre Verde para el periodo municipal 2023–2026. La resolución de proclamación del JNE registra la credencial a su nombre.",
+    status: "Cargo ejercido",
+    document: "Resolución de proclamación · Elecciones Municipales 2022",
+    source: "https://plataformahistorico.jne.gob.pe/Tmp/Proyectos/630612.pdf",
+    institution: "Jurado Nacional de Elecciones",
+  },
+  {
     date: "05/08/2026",
     type: "Tacha a candidatura regional · causal",
     office: "Candidato a gobernador regional de Cajamarca · ERM 2026",
