@@ -89,6 +89,9 @@ export default function Home() {
   const principalRequestRef = useRef(0);
   const dashboardTargetRef = useRef<{ dep: string; level: string; prov: string; dist: string } | null>(null);
   const [geo, setGeo] = useState<any[]>([]);
+  const [geoProvs, setGeoProvs] = useState<any[]>([]);
+  const [geoDists, setGeoDists] = useState<any[]>([]);
+  const [viewBox, setViewBox] = useState("0 0 390 430");
   const [clock, setClock] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [territoryQuery, setTerritoryQuery] = useState("");
   const [territoryIndex, setTerritoryIndex] = useState<any[]>([]);
@@ -1231,32 +1234,7 @@ export default function Home() {
             </div>
             <div className="geo-wrap">
               {geo.length ? (
-                <svg
-                  viewBox="0 0 390 430"
-                  role="img"
-                  aria-label="Mapa interactivo de departamentos del Perú"
-                >
-                  {geo.map((f: any) => {
-                    const code = jneCodeForMap(f.properties.NOMBDEP);
-                    return (
-                      <path
-                        key={f.properties.NOMBDEP}
-                        data-department={fmt(f.properties.NOMBDEP)}
-                        data-jne-code={code}
-                        d={geoPath(f.geometry)}
-                        className={dep === code ? "selected" : ""}
-                        onClick={() => {
-                          if (code) {
-                            setDep(code);
-                            setLevel("4");
-                          }
-                        }}
-                      >
-                        <title>{fmt(f.properties.NOMBDEP)}</title>
-                      </path>
-                    );
-                  })}
-                </svg>
+                <svg viewBox={viewBox} role="img" aria-label="Mapa interactivo del Per�" style={{transition:"viewBox 0.5s ease-in-out"}}>{renderFeatures.map((f: any) => { let code="", name="", isSelected=false, onClick=()=>{}; if (level==="6" && prov) { code=f.properties.IDDIST; name=f.properties.NOMBDIST; isSelected = dist===code; onClick=()=>setDist(code); } else if (level==="5" && dep) { code=f.properties.FIRST_IDPR; name=f.properties.NOMBPROV; isSelected = prov===code; onClick=()=>{setProv(code);setLevel("6");}; } else { code = jneCodeForMap(f.properties.NOMBDEP); name = f.properties.NOMBDEP; isSelected = dep===code; onClick=()=>{if(code){setDep(code);setLevel("5");}}; } return (<path key={code||name} data-name={fmt(name)} data-jne-code={code} d={geoPath(f.geometry)} className={isSelected?"selected":""} onClick={onClick}><title>{fmt(name)}</title></path>); })}</svg>
               ) : (
                 <div className="map-loading">Cargando mapa…</div>
               )}
